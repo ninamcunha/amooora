@@ -94,10 +94,10 @@ def clean_text_data(df: pd.DataFrame) -> pd.DataFrame:
 # CODE TO TEST THIS FILE!!!
 # MUST BE REMOVED!
 
-import os
-print(os.path.dirname(__file__))
-root_folder = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-df = pd.read_csv(root_folder + '/raw_data/okcupid_profiles.csv')
+# import os
+# print(os.path.dirname(__file__))
+# root_folder = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+# df = pd.read_csv(root_folder + '/raw_data/okcupid_profiles.csv')
 
-clean_df = clean_text_data(df)
-print(clean_df.columns)
+# clean_df = clean_text_data(df)
+# print(clean_df.columns)

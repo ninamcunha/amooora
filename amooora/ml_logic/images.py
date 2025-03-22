@@ -46,14 +46,14 @@ def retrieve_images(id: int) -> None:
 
 
 
-ids = [22670, 36389, 4295, 44270, 136]
-for idx in ids:
-    message = retrieve_images(idx)
-    print(message)
+# ids = [22670, 36389, 4295, 44270, 136]
+# for idx in ids:
+#     message = retrieve_images(idx)
+#     print(message)
 
-# match_1	match_2	match_3	match_4	match_5
-# 0	22670	36389	4295	44270	136
-# 1	36507	26895	58469	39768	55205
-# 2	50006	48841	12933	46852	42873
-# 3	7635	3356	48076	7123	28862
-# 4	109	4427	23631	33688	40679
+# # match_1	match_2	match_3	match_4	match_5
+# # 0	22670	36389	4295	44270	136
+# # 1	36507	26895	58469	39768	55205
+# # 2	50006	48841	12933	46852	42873
+# # 3	7635	3356	48076	7123	28862
+# # 4	109	4427	23631	33688	40679
