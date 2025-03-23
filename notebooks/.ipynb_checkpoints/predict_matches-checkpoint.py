@@ -9,10 +9,10 @@ from sklearn.cluster import DBSCAN
 # Get the directory containing predict_matches.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define paths to the model and scaler files
-dbscan_path = os.path.join(current_dir, "dbscan_model.pkl")
-age_scaler_path = os.path.join(current_dir, "age_scaler.pkl")
-height_scaler_path = os.path.join(current_dir, "height_scaler.pkl")
+# Define paths to the model and scaler files in the "pkl" folder
+dbscan_path = os.path.join(current_dir, "..", "pkl", "dbscan_model.pkl")  # Updated path
+age_scaler_path = os.path.join(current_dir, "..", "pkl", "age_scaler.pkl")  # Updated path
+height_scaler_path = os.path.join(current_dir, "..", "pkl", "height_scaler.pkl")  # Updated path
 
 # Load the pre-trained model and scalers
 dbscan = joblib.load(dbscan_path)
@@ -20,7 +20,7 @@ age_scaler = joblib.load(age_scaler_path)
 height_scaler = joblib.load(height_scaler_path)
 
 # Define the path to the dataset
-dataset_path = "/Users/nina2012/code/ninamcunha/amooora/raw_data/ok_stream.csv"
+dataset_path = os.path.join(current_dir, "..", "raw_data", "ok_stream.csv")  
 
 # Load the dataset
 ok = pd.read_csv(dataset_path)
