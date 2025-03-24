@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from amooora.ml_logic.data import clean_text_data
 from amooora.ml_logic.preprocessor import preprocess_texts, preprocess_text_length
 from amooora.ml_logic.images import retrieve_images
@@ -59,13 +60,17 @@ def clean_and_preprocess(user_input_df: pd.DataFrame) -> None:
     print(user_input_df.columns)
     print(user_input_df.topic_0_from_two)
 
-    top_5_similar_people = predict_similar_people(user_input_df)
-    print(top_5_similar_people)
-    # HARD CODED
+    top_5 = predict_similar_people(user_input_df)
+
     # Get image from recommendation
     print(Fore.MAGENTA + f"\n ⭐️ #retrieve_images: running" + Style.RESET_ALL)
 
-    ids = [22670, 36389, 4295, 44270, 136]
+    ids = np.array(top_5.index)
+
+    print(ids)
+
+    print(top_5.bio)
+
     for idx in ids:
         message = retrieve_images(idx)
         print(message)
