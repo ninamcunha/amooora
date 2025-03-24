@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from predict_matches import predict_similar_people  # Import the prediction function
 import os
-
+import requests
 
 # Get the directory containing app.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -543,7 +543,13 @@ if st.session_state.page == "Connections":
         user_input_df = user_input_df.reindex(columns=required_columns, fill_value=0)
 
         # Call your prediction function
-        top_5_similar_people = predict_similar_people(user_input_df)
+        # top_5_similar_people = predict_similar_people(user_input_df)
+        endpoint_url = "http://127.0.0.1:8000/recommend?age_scaled=23&height_scaled=1.75&female=1&single=1&orientation_bisexual=0&orientation_gay=0&orientation_straight=1&diet_type_vegetarian=0&education_type_college_univ=0&education_type_grad_or_professional_edu=0&education_type_two_year_college_or_less=0&education_status_graduated=1&education_status_working=0&speaks_english=1&speaks_spanish=1&speaks_portuguese=0&speaks_other=0&has_dogs_yes=1&no_of_kids_more_than_one=0&no_of_kids_one=0&education_type_not_disclosed=0&education_status_not_disclosed=0&essay0=%22I%20would%20love%20to%20think%20that%20I%20was%20some%20kind%20of%20intellectual...%22&essay1=%22Currently%20working%20as%20an%20international%20agent%20for%20an%20NGO...%22&essay2=%22I%27m%20really%20good%20at%20listening%20and%20being%20there%20for%20my%20friends.%20I%27m%20very%20dependable,%20honest%20and%20a%20great%20communicator.%22&essay3=%22My%20eyes%20are%20the%20first%20thing%20people%20notice%20when%20they%20look%20and%20my%20sense%20of%20humor%20is%20what%20they%20notice%20when%20they%20talk%20to%20me.%22&essay4=%22I%27m%20die%20hard%20christopher%20moore%20fan.%20I%20don%27t%20really%20watch%20a%20lot%20of%20tv%20unless%20there%20is%20humor%20involved.%20I%27m%20kind%20of%20stuck%20on%2090%27s%20alternative%20music.%20I%27m%20pretty%20much%20a%20fan%20of%20everything%20though...I%20do%20need%20to%20draw%20a%20line%20at%20most%20types%20of%20electronica.%22&essay5=%22hot%20chocolate,%20running,%20a%20good%20meal,%20a%20good%20read,%20stimulating%20conversation,%20time%20alone%20to%20recharge,%20laughter,%20hope....%20maybe%208%20things...%22&essay6=%22my%20mind%20is%20always%20being%20distracted%20by%20planning%20some%20adventure%20out%20of%20the%20city,%20creating%20music%20and%20international%20travel.%22&essay7=%22having%20dinner%20and%20drinks%20with%20friends%20and/or%20working%22&essay8=%22when%20i%20was%20a%20kid%20i%20thought%20steven%20segal%20was%20really%20cool.%20please%20don%27t%20judge%20me.%22&essay9=%22you%20want%20to%20be%20swept%20off%20your%20feet!%20you%20are%20tired%20of%20the%20norm.%20you%20want%20to%20catch%20a%20coffee%20or%20a%20bite.%20or%20if%20you%20want%20to%20talk%20philosophy.%22"
+        response = requests.get(endpoint_url).json()
+        # print(f"ESSA é a response: {top_5_similar_people}")
+        # print(type(top_5_similar_people))
+
+        top_5_similar_people = pd.DataFrame(response['recommendations'])
 
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
