@@ -249,16 +249,42 @@ if st.session_state.page == "Connections":
             user_input['height_scaled'] = st.number_input("Height (in meters)", min_value=1.0, max_value=2.5, value=1.75, step=0.01)
 
         # Gender
-        gender_options = ["Male", "Female", "Non-Binary", "Transgender", "Other"]
-        selected_gender = st.radio("Gender", gender_options)
-            
-        # Recode gender as female (1) or male (0)
-        if selected_gender in ["Female", "Non-Binary", "Transgender", "Other"]:
-            user_input['female'] = 1  # Recode as female
-        else:
-            user_input['female'] = 0  # Recode as male
+        gender_options = ["Female", "Male", "Non-Binary", "Transgender", "Other"]
+        selected_gender = st.radio("Gender", gender_options, index=0)  # index=0 makes Female selected
         
-        # Relationship Status
+        if selected_gender == "Male":
+            container = st.container()
+
+            with container:
+                # Display the styled message with placeholder links
+                st.markdown('''<div style='background-color:#f8f9fa;padding:20px;border-radius:10px;margin:20px 0;font-family:sans-serif'>
+        <h3 style='color:purple'>Thank you for your interest in Amooora! 💜</h3>
+        <p>While we appreciate everyone who wants to join our community, Amooora is specifically designed as a safe space for <strong>LGBTQ+ women, trans, and non-binary individuals</strong> to connect and find belonging.</p>
+        <p>We celebrate your support for our mission to create a world of freedom and authentic connections for our community.</p>
+        <p>Please consider sharing our platform with LGBTQ+ women, trans, and non-binary friends who might benefit from our community.</p>
+        <p>To learn more about our purpose, visit our About section or explore the Methodology</span> behind our matching system.</p>
+        </div>''', unsafe_allow_html=True)
+
+            # Create buttons for navigation (styled as links)
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("About Section", type="secondary"):
+                    st.session_state.page = "About"
+                    st.rerun()
+            with col2:
+                if st.button("Our Methodology", type="secondary"):
+                    st.session_state.page = "Methodology"
+                    st.rerun()
+
+            st.stop()
+
+            # Recode gender as female (1) or male (0)
+            if selected_gender in ["Female", "Non-Binary", "Transgender", "Other"]:
+                user_input['female'] = 1  # Recode as female
+            else:
+                user_input['female'] = 0  # Recode as male
+
+            # Relationship Status
         user_input['single'] = st.radio("Relationship Status", ["Single", "In a Relationship"])
         user_input['single'] = 1 if user_input['single'] == "Single" else 0 
             
@@ -266,9 +292,36 @@ if st.session_state.page == "Connections":
     with col2:
         
         # Orientation
-        orientation = st.radio("Orientation", ["Bisexual", "Gay", "Straight"])
-        user_input['orientation_bisexual'] = 1 if orientation == "Bisexual" else 0
-        user_input['orientation_gay'] = 1 if orientation == "Gay" else 0
+        orientation = st.radio("Orientation", [
+            "Queer",
+            "Lesbian",
+            "Bisexual/Pansexual", 
+            "Asexual",
+            "Questioning",
+            "Straight"
+        ])
+
+        if orientation == "Straight":
+            st.markdown(f"""<div style='
+                background-color: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                font-family: sans-serif;'>
+                <h3 style='color: purple;'>Thank you for your interest in Amooora! 💜</h3>
+                <p>While we welcome everyone who supports our mission, Amooora is specifically designed as a safe space for <strong>LGBTQ+ women, trans, and non-binary individuals</strong> to connect and find belonging.</p>
+                <p>We appreciate allies who want to engage with our community, and encourage you to explore our public resources and share them with LGBTQ+ friends who might benefit.</p>
+            </div>""", unsafe_allow_html=True)
+
+            if st.button("Learn About Our Purpose"):
+                st.session_state.page = "About"
+                st.rerun()  # Changed from experimental_rerun() to rerun()
+
+            st.stop()
+
+        # Recode logic as per your specifications:
+        user_input['orientation_gay'] = 1 if orientation in ["Queer", "Lesbian", "Asexual", "Questioning"] else 0
+        user_input['orientation_bisexual'] = 1 if orientation == "Bisexual/Pansexual" else 0
         user_input['orientation_straight'] = 1 if orientation == "Straight" else 0
 
         # Diet Type
@@ -395,25 +448,23 @@ if st.session_state.page == "Connections":
     st.write("### Tell us a little bit more about yourself")
 
     # Create two columns for the new text fields
-    col4, col5, col6 = st.columns(3)
+    col4, col5 = st.columns(2)
 
-    # Column 3
+    # Column 4
     with col4:
-        user_input['hobby_1'] = st.text_input("What is your favorite hobby?")
-        user_input['hobby_2'] = st.text_input("What is your second favorite hobby?")
-        user_input['hobby_3'] = st.text_input("What is your third favorite hobby?")
-
+        user_input['essay0'] = st.text_input("What is your favorite hobby?", key="essay0_input")
+        user_input['essay1'] = st.text_input("What is your second favorite hobby?", key="essay1_input")
+        user_input['essay2'] = st.text_input("What is your third favorite hobby?", key="essay2_input")
+        user_input['essay3'] = st.text_input("What is your favorite movie genre?", key="essay3_input")
+        user_input['essay4'] = st.text_input("What is your favorite music genre?", key="essay4_input")
+        
     # Column 5
     with col5:
-        user_input['movie_genre'] = st.text_input("What is your favorite movie genre?")
-        user_input['music_genre'] = st.text_input("What is your favorite music genre?")
-        user_input['travel_destination'] = st.text_input("What is your dream travel destination?")
-        
-    # Column 6
-    with col6:
-        user_input['book_genre'] = st.text_input("What is your favorite book genre?")
-        user_input['sport'] = st.text_input("What is your favorite sport?")
-        user_input['food'] = st.text_input("What is your favorite food?")
+        user_input['essay5'] = st.text_input("What is your dream travel destination?", key="essay5_input")
+        user_input['essay6'] = st.text_input("What is your favorite book genre?", key="essay6_input")
+        user_input['essay7'] = st.text_input("What is your favorite sport?", key="essay7_input")
+        user_input['essay8'] = st.text_input("What is your favorite food?", key="essay8_input")
+        user_input['essay9'] = st.text_input("Write anything else about yourself", key="essay9_input")
 
     # Add placeholders for essay variables
     for i in range(10):
@@ -440,12 +491,40 @@ if st.session_state.page == "Connections":
     )
 
 
-    
     # Predict matches when the user submits the form
     if st.button("Find Connections"):
+        
+        for i in range(10):
+            user_input[f'essay{i}'] = st.session_state.get(f'essay{i}_input', '')
+            
         # Convert user input to a DataFrame
         user_input_df = pd.DataFrame([user_input])
-        
+
+        # Ensure all essay columns exist and contain user input
+        for i in range(10):
+            essay_key = f'essay{i}'
+            # Add column if it doesn't exist
+            if essay_key not in user_input_df.columns:
+                user_input_df[essay_key] = user_input.get(essay_key, "")
+
+
+        # Get absolute path to csv directory (two levels up from py/)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        csv_dir = os.path.join(project_root, "csv")
+        os.makedirs(csv_dir, exist_ok=True)
+
+        csv_path = os.path.join(csv_dir, "user_input.csv")
+
+        # Save with error handling
+        try:
+            if os.path.exists(csv_path):
+                user_input_df.to_csv(csv_path, mode='a', header=False, index=False)
+            else:
+                user_input_df.to_csv(csv_path, index=False)
+            st.success("Form Submitted!")
+        except Exception as e:
+            st.error(f"Failed to submit the form: {str(e)}")
+                
         # Ensure the DataFrame has all the required columns in the correct order
         required_columns = [
             'female', 'age_scaled', 'single', 'height_scaled', 'orientation_bisexual', 
