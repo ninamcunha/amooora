@@ -3,7 +3,7 @@ import pandas as pd
 from amooora.ml_logic.data import clean_text_data
 from amooora.ml_logic.preprocessor import preprocess_texts, vectorize_texts
 from amooora.ml_logic.images import retrieve_images
-from amooora.ml_logic.registry import load_model, load_vectorizer
+from amooora.ml_logic.registry import load_model, load_vectorizer, load_text_length_scaler
 from sklearn.preprocessing import MinMaxScaler
 
 from colorama import Fore, Style
@@ -43,11 +43,16 @@ def clean_and_preprocess() -> None:
     clean_preprocessed_df['text_length'] = clean_preprocessed_df.combined_preprocessed.str.len()
 
     # Scaled min max text-length
+    # load text_length_scaler
+
     # Clip values above the 99th percentile
     upper_threshold = clean_preprocessed_df['text_length'].quantile(0.99)
     clean_preprocessed_df['text_length_clipped'] = clean_preprocessed_df['text_length'].clip(upper=upper_threshold)
-    scaler = MinMaxScaler()
+
+    scaler = load_text_length_scaler()
+
     clean_preprocessed_df['text_length_scaled'] = scaler.fit_transform(clean_preprocessed_df[['text_length_clipped']])
+
     print(clean_preprocessed_df.columns)
 
     # Load vectorizer fitted with the whole DS
@@ -74,6 +79,9 @@ def clean_and_preprocess() -> None:
 
     # recommend (predict)
     # LDA + MODELO DA NINA
+
+    
+
 
     # Get image from recommendation
     print(Fore.MAGENTA + f"\n ⭐️ #retrieve_images: running" + Style.RESET_ALL)

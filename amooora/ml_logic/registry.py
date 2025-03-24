@@ -39,3 +39,10 @@ def load_model(): # o que retorna aqui?
     print("✅ Model loaded from local disk")
 
     return lda
+
+
+def load_text_length_scaler():
+    with open('pkl/text_length_scaler.pkl', 'rb') as f:
+        text_length_scaler = pickle.load(f)
+
+    return text_length_scaler
