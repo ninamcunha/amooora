@@ -9,13 +9,6 @@ from amooora.ml_logic.model import predict_similar_people
 from colorama import Fore, Style
 
 def clean_and_preprocess(user_input_df: pd.DataFrame) -> None:
-    # 0. Get data from CSV
-    # PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    # filename = os.path.join(PROJECT_FOLDER, "raw_data",
-    #  "okcupid_profiles.csv")
-    # original_df = pd.read_csv(filename)
-
-
     # 1. Clean texts
     cleaned_df = clean_text_data(user_input_df)
 
@@ -56,6 +49,7 @@ def clean_and_preprocess(user_input_df: pd.DataFrame) -> None:
     # text_length_scaled
     #=> já está dentro do dataFrame pq foi incluido no #preprocess_text_length
     user_input_df['text_length_scaled'] = clean_preprocessed_df.text_length_scaled
+
     # Quanto que o texto esta dentro do topic_0_from_two
     # incluir topic_0_from_two no DataFrame
     # => document_topic_mixture[0]
@@ -65,8 +59,8 @@ def clean_and_preprocess(user_input_df: pd.DataFrame) -> None:
     print(user_input_df.columns)
     print(user_input_df.topic_0_from_two)
 
-    predict_similar_people(user_input_df)
-
+    top_5_similar_people = predict_similar_people(user_input_df)
+    print(top_5_similar_people)
     # HARD CODED
     # Get image from recommendation
     print(Fore.MAGENTA + f"\n ⭐️ #retrieve_images: running" + Style.RESET_ALL)
@@ -90,21 +84,21 @@ if __name__ == '__main__':
 
     df = pd.DataFrame(
         {
-        'age_scaled': 30,
+        'age_scaled': 23,
         'height_scaled': 1.75,
-        'female': 0,
+        'female': 1,
         'single': 1,
-        'orientation_bisexual': 1,
+        'orientation_bisexual': 0,
         'orientation_gay': 0,
-        'orientation_straight': 0,
-        'diet_type_vegetarian': 1,
-        'education_type_college_univ': 1,
+        'orientation_straight': 1,
+        'diet_type_vegetarian': 0,
+        'education_type_college_univ': 0,
         'education_type_grad_or_professional_edu': 0,
         'education_type_two_year_college_or_less': 0,
         'education_status_graduated': 1,
         'education_status_working': 0,
-        'speaks_english': 0,
-        'speaks_spanish': 0,
+        'speaks_english': 1,
+        'speaks_spanish': 1,
         'speaks_portuguese': 0,
         'speaks_other': 0,
         'has_dogs_yes': 1,
@@ -144,3 +138,11 @@ if __name__ == '__main__':
 
 
 # GUARDAR AS INFORMAÇÔES DOS USUARIOS QUE FOREM USANDO
+
+
+#        female  age_scaled  single  height_scaled  ...  text_length_scaled  topic_0_from_two                                                bio  cluster
+# 6366        1    1.000000       1       0.423077  ...            0.007868          0.500000  69 years old woman, currently single. Zodiac s...      204
+# 3872        1    0.901961       1       0.384615  ...            0.431129          0.644636  64 years old woman, currently single. Zodiac s...      204
+# 17344       1    0.862745       1       0.307692  ...            0.132345          0.670186  62 years old woman, currently single. Zodiac s...      204
+# 3837        1    0.862745       1       0.153846  ...            0.150704          0.842800  62 years old woman, currently single. Zodiac s...      204
+# 11738       1    0.843137       1       0.346154  ...            0.333283          0.668358  61 years old woman, currently single. Zodiac s...      204
