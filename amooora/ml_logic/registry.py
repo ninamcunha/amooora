@@ -5,6 +5,15 @@ from pathlib import Path
 
 from colorama import Fore, Style
 
+def load_vectorizer():
+    """
+    Load vectorizer already fitted with all the original texts
+    """
+    # load
+    with open('pkl/tf_idf_vectorizer.pkl', 'rb') as f:
+        tfidf_vec = pickle.load(f)
+    return tfidf_vec
+
 def load_model(): # o que retorna aqui?
     """
     Return saved model:
