@@ -4,34 +4,20 @@ from amooora.ml_logic.data import clean_text_data
 from amooora.ml_logic.preprocessor import preprocess_texts, preprocess_text_length
 from amooora.ml_logic.images import retrieve_images
 from amooora.ml_logic.registry import load_model, load_vectorizer
+from amooora.ml_logic.model import predict_similar_people
 
 from colorama import Fore, Style
 
-def clean_and_preprocess() -> None:
+def clean_and_preprocess(user_input_df: pd.DataFrame) -> None:
     # 0. Get data from CSV
     # PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     # filename = os.path.join(PROJECT_FOLDER, "raw_data",
     #  "okcupid_profiles.csv")
     # original_df = pd.read_csv(filename)
 
-    df = pd.DataFrame(
-        {
-            "essay0":"I would love to think that I was some kind of intellectual...",
-            "essay1":"Currently working as an international agent for an NGO...",
-            "essay2":"I'm really good at listening and being there for my friends. I'm very dependable, honest and a great communicator.",
-            "essay3":"My eyes are the first thing people notice when they look and my sense of humor is what they notice when they talk to me.",
-            "essay4":"I'm die hard christopher moore fan. I don't really watch a lot of tv unless there is humor involved. I'm kind of stuck on 90's alternative music. I'm pretty much a fan of everything though...I do need to draw a line at most types of electronica.",
-            "essay5":"hot chocolate, running, a good meal, a good read, stimulating conversation, time alone to recharge, laughter, hope.... maybe 8 things...",
-            "essay6":"my mind is always being distracted by planning some adventure out of the city, creating music and international travel.",
-            "essay7":"having dinner and drinks with friends and/or working",
-            "essay8":"when i was a kid i thought steven segal was really cool. please don't judge me.",
-            "essay9":"you want to be swept off your feet! you are tired of the norm. you want to catch a coffee or a bite. or if you want to talk philosophy."
-        },
-        index=[0]
-    )
 
     # 1. Clean texts
-    cleaned_df = clean_text_data(df)
+    cleaned_df = clean_text_data(user_input_df)
 
     # 2. Preprocessing texts
     clean_preprocessed_df = preprocess_texts(cleaned_df)
@@ -65,9 +51,21 @@ def clean_and_preprocess() -> None:
 
     # recommend (predict)
     # LDA + MODELO DA NINA
+    # Antes de enviar para predição
+    # precisamos incluir
+    # text_length_scaled
+    #=> já está dentro do dataFrame pq foi incluido no #preprocess_text_length
+    user_input_df['text_length_scaled'] = clean_preprocessed_df.text_length_scaled
+    # Quanto que o texto esta dentro do topic_0_from_two
+    # incluir topic_0_from_two no DataFrame
+    # => document_topic_mixture[0]
+    user_input_df['topic_0_from_two'] = document_topic_mixture[0][0]
 
+    user_input_df = user_input_df.drop(columns=['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9'])
+    print(user_input_df.columns)
+    print(user_input_df.topic_0_from_two)
 
-
+    predict_similar_people(user_input_df)
 
     # HARD CODED
     # Get image from recommendation
@@ -89,7 +87,46 @@ def clean_and_preprocess() -> None:
 
 
 if __name__ == '__main__':
-    clean_and_preprocess()
+
+    df = pd.DataFrame(
+        {
+        'age_scaled': 30,
+        'height_scaled': 1.75,
+        'female': 0,
+        'single': 1,
+        'orientation_bisexual': 1,
+        'orientation_gay': 0,
+        'orientation_straight': 0,
+        'diet_type_vegetarian': 1,
+        'education_type_college_univ': 1,
+        'education_type_grad_or_professional_edu': 0,
+        'education_type_two_year_college_or_less': 0,
+        'education_status_graduated': 1,
+        'education_status_working': 0,
+        'speaks_english': 0,
+        'speaks_spanish': 0,
+        'speaks_portuguese': 0,
+        'speaks_other': 0,
+        'has_dogs_yes': 1,
+        'no_of_kids_more_than_one': 0,
+        'no_of_kids_one': 0,
+        'education_type_not_disclosed': 0,
+        'education_status_not_disclosed': 0,
+        "essay0":"I would love to think that I was some kind of intellectual...",
+        "essay1":"Currently working as an international agent for an NGO...",
+        "essay2":"I'm really good at listening and being there for my friends. I'm very dependable, honest and a great communicator.",
+        "essay3":"My eyes are the first thing people notice when they look and my sense of humor is what they notice when they talk to me.",
+        "essay4":"I'm die hard christopher moore fan. I don't really watch a lot of tv unless there is humor involved. I'm kind of stuck on 90's alternative music. I'm pretty much a fan of everything though...I do need to draw a line at most types of electronica.",
+        "essay5":"hot chocolate, running, a good meal, a good read, stimulating conversation, time alone to recharge, laughter, hope.... maybe 8 things...",
+        "essay6":"my mind is always being distracted by planning some adventure out of the city, creating music and international travel.",
+        "essay7":"having dinner and drinks with friends and/or working",
+        "essay8":"when i was a kid i thought steven segal was really cool. please don't judge me.",
+        "essay9":"you want to be swept off your feet! you are tired of the norm. you want to catch a coffee or a bite. or if you want to talk philosophy."
+        },
+        index=[0]
+    )
+
+    clean_and_preprocess(df)
     # try:
     #     # preprocess_and_train()
     #     preprocess()
@@ -103,3 +140,7 @@ if __name__ == '__main__':
     #     extype, value, tb = sys.exc_info()
     #     traceback.print_exc()
     #     ipdb.post_mortem(tb)
+
+
+
+# GUARDAR AS INFORMAÇÔES DOS USUARIOS QUE FOREM USANDO
