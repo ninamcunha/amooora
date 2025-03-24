@@ -39,6 +39,3 @@ def load_model(): # o que retorna aqui?
     print("✅ Model loaded from local disk")
 
     return lda
-
-
-load_model()
