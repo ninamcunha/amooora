@@ -82,7 +82,7 @@ def clean_and_preprocess(user_input_df: pd.DataFrame) -> None:
     # 2	50006	48841	12933	46852	42873
     # 3	7635	3356	48076	7123	28862
     # 4	109	4427	23631	33688	40679
-
+    return top_5
 
 
 if __name__ == '__main__':
@@ -151,3 +151,4 @@ if __name__ == '__main__':
 # 17344       1    0.862745       1       0.307692  ...            0.132345          0.670186  62 years old woman, currently single. Zodiac s...      204
 # 3837        1    0.862745       1       0.153846  ...            0.150704          0.842800  62 years old woman, currently single. Zodiac s...      204
 # 11738       1    0.843137       1       0.346154  ...            0.333283          0.668358  61 years old woman, currently single. Zodiac s...      204
+# age_scaled=23&height_scaled=1.75&female=1&single=1&orientation_bisexual=0&orientation_gay=0&orientation_straight=1&diet_type_vegetarian=0&education_type_college_univ=0&education_type_grad_or_professional_edu=0&education_type_two_year_college_or_less=0&education_status_graduated=1&education_status_working=0&speaks_english=1&speaks_spanish=1&speaks_portuguese=0&speaks_other=0&has_dogs_yes=1&no_of_kids_more_than_one=0&no_of_kids_one=0&education_type_not_disclosed=0&education_status_not_disclosed=0&essay0="I would love to think that I was some kind of intellectual..."&essay1="Currently working as an international agent for an NGO..."&essay2="I'm really good at listening and being there for my friends. I'm very dependable, honest and a great communicator."&essay3="My eyes are the first thing people notice when they look and my sense of humor is what they notice when they talk to me."&essay4="I'm die hard christopher moore fan. I don't really watch a lot of tv unless there is humor involved. I'm kind of stuck on 90's alternative music. I'm pretty much a fan of everything though...I do need to draw a line at most types of electronica."&essay5="hot chocolate, running, a good meal, a good read, stimulating conversation, time alone to recharge, laughter, hope.... maybe 8 things..."&essay6="my mind is always being distracted by planning some adventure out of the city, creating music and international travel."&essay7="having dinner and drinks with friends and/or working"&essay8="when i was a kid i thought steven segal was really cool. please don't judge me."&essay9="you want to be swept off your feet! you are tired of the norm. you want to catch a coffee or a bite. or if you want to talk philosophy."
