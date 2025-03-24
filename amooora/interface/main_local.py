@@ -66,7 +66,9 @@ def clean_and_preprocess() -> None:
     # Model da nina usa o primeiro topic ou o mais bem sucedido
 
     # Transform essays into topics
+    print(Fore.MAGENTA + f"\n ⭐️ #lad model running" + Style.RESET_ALL)
     document_topic_mixture = lda_model.transform(combined_weighted_words)
+    print(Fore.MAGENTA + f"\n ⭐️ lda model DONE ✅" + Style.RESET_ALL)
 
     print(document_topic_mixture)
 
