@@ -54,8 +54,4 @@ def vectorize_texts(df: pd.DataFrame) -> pd.DataFrame:
     combined_weighted_words = pd.DataFrame(tf_idf_vectorizer.fit_transform(df.combined_preprocessed.values).toarray(),
                     columns = tf_idf_vectorizer.get_feature_names_out())
 
-    return combined_weighted_words
-
-
-
-# CRIAR UM DF COM UA LINHA COM AS MESMAS COLUNAS!
+    return tf_idf_vectorizer
