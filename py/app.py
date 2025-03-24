@@ -510,7 +510,7 @@ if st.session_state.page == "Connections":
 
         # Get absolute path to csv directory (two levels up from py/)
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        csv_dir = os.path.join(project_root, "csv")
+        csv_dir = os.path.join(project_root, "raw_data")
         os.makedirs(csv_dir, exist_ok=True)
 
         csv_path = os.path.join(csv_dir, "user_input.csv")
