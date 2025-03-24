@@ -1,12 +1,14 @@
 import pandas as pd
+import nltk
+from colorama import Fore, Style
 from nltk.tokenize import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
-import nltk
-from colorama import Fore, Style
-from amooora.utils import simple_time_and_memory_tracker
-nltk.download('punkt_tab')
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import MinMaxScaler
+from amooora.utils import simple_time_and_memory_tracker
+from amooora.ml_logic.registry import load_text_length_scaler
+nltk.download('punkt_tab')
 
 @simple_time_and_memory_tracker
 def preprocess_texts(df: pd.DataFrame) -> pd.DataFrame:
@@ -55,3 +57,20 @@ def vectorize_texts(df: pd.DataFrame) -> pd.DataFrame:
                     columns = tf_idf_vectorizer.get_feature_names_out())
 
     return tf_idf_vectorizer
+
+
+def preprocess_text_length(df: pd.DataFrame) -> pd.DataFrame:
+    df['text_length'] = df.combined_preprocessed.str.len()
+
+    # Scaled min max text-length
+    # load text_length_scaler
+
+    # Clip values above the 99th percentile
+    upper_threshold = df['text_length'].quantile(0.99)
+    df['text_length_clipped'] = df['text_length'].clip(upper=upper_threshold)
+
+    scaler = load_text_length_scaler()
+
+    df['text_length_scaled'] = scaler.fit_transform(df[['text_length_clipped']])
+
+    return df
