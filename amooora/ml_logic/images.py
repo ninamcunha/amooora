@@ -47,18 +47,21 @@ def retrieve_images(id: int) -> None:
     else:
         print("No matching row found.")
 
-    return f"Recommendation age is {recommendation_age}"
+    return selected_row.image_path
 
 
 
-def recommendation_images():
+def recommendation_images(image_path: str):
     # Acessar a imagem no caminho correto
     PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    filename = os.path.join(PROJECT_FOLDER, "female_images", "flamengo-flag.jpg")
+    # filename = os.path.join(PROJECT_FOLDER, "female_images", "flamengo-flag.jpg")
+    filename = os.path.join(PROJECT_FOLDER, 'raw_data', 'human_faces', image_path)
     # image_path = '../../female_images/flamengo-flag.jpg'
 
+    print(filename)
+
     if not os.path.exists(filename):
-        return None
+        return 'FILE DOES NOT EXIST!!!'
 
     ## abrir a imagem usando PIL
     # assim vai conseguir ser interpretado pelo numpy
