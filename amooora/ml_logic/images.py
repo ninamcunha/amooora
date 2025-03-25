@@ -58,8 +58,6 @@ def recommendation_images(image_path: str):
     filename = os.path.join(PROJECT_FOLDER, 'raw_data', 'human_faces', image_path)
     # image_path = '../../female_images/flamengo-flag.jpg'
 
-    print(filename)
-
     if not os.path.exists(filename):
         return 'FILE DOES NOT EXIST!!!'
 

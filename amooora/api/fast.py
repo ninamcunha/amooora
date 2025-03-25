@@ -96,36 +96,12 @@ def recommend(
 
 
 @app.get('/images')
-def images(id_0: int, id_1: int, id_2: int, id_3: int, id_4: int):
+def images(idx: int):
     print("!!!! RODANDO API ENDPOINT !!!!")
 
-    # usar retrieve images para enviar o id e receber o file path
-
-
-    dict_to_return = {}
-
-    for i, idx in enumerate([id_0, id_1, id_2, id_3, id_4]):
-        image_path = retrieve_images(idx)
-        image = recommendation_images(image_path)
-        img_bytes = io.BytesIO()
-        image.save(img_bytes, format="PNG")  # Change format if needed (PNG, JPEG, etc.)
-        img_bytes.seek(0)
-        # dict_to_return[f'id_{i}'] = img_bytes.getvalue()
-        dict_to_return[f'id_{i}'] = Response(content=img_bytes.getvalue(), media_type="image/png")
-
-    # print(dict_to_return)
-
-    # if image is None:
-    #     return Response(content="Image not found", status_code=404)
-
-    # img_bytes = io.BytesIO()
-    # image.save(img_bytes, format="PNG")  # Change format if needed (PNG, JPEG, etc.)
-    # img_bytes.seek(0)
-
-    # return Response(content=img_bytes.getvalue(), media_type="image/png")
-
-    # return {
-        # id_0: Response(content=img_bytes.getvalue(), media_type="image/png")
-    # }
-
-    return dict_to_return['id_0']
+    image_path = retrieve_images(idx)
+    image = recommendation_images(image_path)
+    img_bytes = io.BytesIO()
+    image.save(img_bytes, format="PNG")
+    img_bytes.seek(0)
+    return Response(content=img_bytes.getvalue(), media_type="image/png")

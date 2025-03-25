@@ -573,22 +573,29 @@ if st.session_state.page == "Connections":
         ids = top_5_similar_people.index.to_list()
         st.markdown(ids)
 
-        params = {}
-        for i, idx in enumerate(ids):
-            params[f'id_{i}'] = idx
-
         img_url = "http://localhost:8000/images"
-        img_response = requests.get(img_url, params=params)
 
-        # if img_response.status_code == 200:
-        image = Image.open(io.BytesIO(img_response.content))
-        st.image(image)  # Display the image
+        img_responses = []
+
+        for i, idx in enumerate(ids):
+            # params[f'id_{i}'] = idx
+            img_response = requests.get(img_url, params={"idx": idx})
+            img_responses.append(img_response)
+
+        print(img_responses)
+
+        # for img_response in img_responses:
+        #     print(img_response)
+        #     image = Image.open(io.BytesIO(img_response.content))
+        #     st.image(image)  # Display the image
 
 
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
         for i, bio in enumerate(top_5_similar_people['bio'], start=1):
             st.write(f"#### Connection {i}")
+            image = Image.open(io.BytesIO(img_responses[i].content))
+            st.image(image)
             st.write(bio)  # Display the bio as a single block of text
             st.write("---")  # Add a separator between bios
 
