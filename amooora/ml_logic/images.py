@@ -20,7 +20,7 @@ def retrieve_images(id: int) -> None:
     # retrieve image matching age and sex
 
     ## load images CSV
-    filename_img = os.path.join(PROJECT_FOLDER, "raw_data", "female_images_df.csv")
+    filename_img = os.path.join(PROJECT_FOLDER, "raw_data", "unique_female.csv")
     images_df = pd.read_csv(filename_img).dropna()
 
     images_df = images_df.drop_duplicates(subset='image_path')
