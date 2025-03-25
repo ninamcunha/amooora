@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from predict_matches import predict_similar_people  # Import the prediction function
 import os
-
+import requests
 
 # Get the directory containing app.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -278,11 +278,11 @@ if st.session_state.page == "Connections":
 
             st.stop()
 
-            # Recode gender as female (1) or male (0)
-            if selected_gender in ["Female", "Non-Binary", "Transgender", "Other"]:
-                user_input['female'] = 1  # Recode as female
-            else:
-                user_input['female'] = 0  # Recode as male
+        # Recode gender as female (1) or male (0)
+        if selected_gender in ["Female", "Non-Binary", "Transgender", "Other"]:
+            user_input['female'] = 1  # Recode as female
+        else:
+            user_input['female'] = 0  # Recode as male
 
             # Relationship Status
         user_input['single'] = st.radio("Relationship Status", ["Single", "In a Relationship"])
@@ -510,7 +510,7 @@ if st.session_state.page == "Connections":
 
         # Get absolute path to csv directory (two levels up from py/)
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        csv_dir = os.path.join(project_root, "csv")
+        csv_dir = os.path.join(project_root, "raw_data")
         os.makedirs(csv_dir, exist_ok=True)
 
         csv_path = os.path.join(csv_dir, "user_input.csv")
@@ -543,7 +543,27 @@ if st.session_state.page == "Connections":
         user_input_df = user_input_df.reindex(columns=required_columns, fill_value=0)
 
         # Call your prediction function
-        top_5_similar_people = predict_similar_people(user_input_df)
+        # top_5_similar_people = predict_similar_people(user_input_df)
+        print("###########################")
+        print("###########################")
+        print("###########################")
+        print(user_input)
+        print("###########################")
+        print("###########################")
+        print("###########################")
+
+        url = "https://amooora-768760105976.europe-west1.run.app/recommend"
+        endpoint_url = url + f"?{''.join('{}={}&'.format(key, val) for key, val in user_input.items())}"
+
+        user_input.pop('name')
+
+
+
+        response = requests.get(url, params=user_input).json()
+        # print(f"ESSA é a response: {top_5_similar_people}")
+        # print(type(top_5_similar_people))
+
+        top_5_similar_people = pd.DataFrame(response['recommendations'])
 
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
