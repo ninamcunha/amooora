@@ -588,9 +588,13 @@ if st.session_state.page == "Connections":
         st.write("### Meet Your Top 5 Community Connections:")
         for i, bio in enumerate(top_5_similar_people['bio'], start=1):
             st.write(f"#### Connection {i}")
+            col_image, col_bio = st.columns([2.5,5])
             image = Image.open(io.BytesIO(img_responses[i-1].content))
-            st.image(image)
-            st.write(bio)  # Display the bio as a single block of text
+            with st.container(border=True):
+                with col_image:
+                    st.image(image)
+                with col_bio:
+                    st.write(bio)  # Display the bio as a single block of text
             st.write("---")  # Add a separator between bios
 
 # About Page
