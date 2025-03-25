@@ -554,7 +554,7 @@ if st.session_state.page == "Connections":
         print("###########################")
         print("###########################")
 
-        url = "http://localhost:8000/recommend"
+        url = "https://amooora-768760105976.europe-west1.run.app/recommend"
         endpoint_url = url + f"?{''.join('{}={}&'.format(key, val) for key, val in user_input.items())}"
 
         user_input.pop('name')
@@ -567,7 +567,7 @@ if st.session_state.page == "Connections":
 
         ids = top_5_similar_people.index.to_list()
 
-        img_url = "http://localhost:8000/images"
+        img_url = "https://amooora-768760105976.europe-west1.run.app/images"
 
         img_responses = []
 
