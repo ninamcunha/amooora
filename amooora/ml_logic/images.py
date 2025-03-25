@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import numpy as np
+from PIL import Image
 
 def retrieve_images(id: int) -> None:
     print(f"id dentro de retrieve images: {id}")
@@ -18,8 +20,10 @@ def retrieve_images(id: int) -> None:
     # retrieve image matching age and sex
 
     ## load images CSV
-    filename_img = os.path.join(PROJECT_FOLDER, "raw_data", "female_images_df.csv")
+    filename_img = os.path.join(PROJECT_FOLDER, "raw_data", "unique_female.csv")
     images_df = pd.read_csv(filename_img).dropna()
+
+    images_df = images_df.drop_duplicates(subset='image_path')
 
     ## create age min and age max from range
     images_df[['age_min', 'age_max']] = images_df['age'].str.extract(r'\((\d+)-(\d+)\)').astype(int)
@@ -45,4 +49,29 @@ def retrieve_images(id: int) -> None:
     else:
         print("No matching row found.")
 
-    return f"Recommendation age is {recommendation_age}"
+    return selected_row.image_path
+
+
+
+def recommendation_images(image_path: str):
+    # Acessar a imagem no caminho correto
+    PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    # filename = os.path.join(PROJECT_FOLDER, "female_images", "flamengo-flag.jpg")
+    filename = os.path.join(PROJECT_FOLDER, 'raw_data', 'human_faces', image_path)
+    # image_path = '../../female_images/flamengo-flag.jpg'
+
+    if not os.path.exists(filename):
+        return 'FILE DOES NOT EXIST!!!'
+
+    ## abrir a imagem usando PIL
+    # assim vai conseguir ser interpretado pelo numpy
+    image = Image.open(filename)
+
+    #  covert pra um ndarray nauqelas 3 dimensoes das aulas
+    # image_array = np.array(image)
+    # breakpoint()
+
+    return image
+    # retornar o numpy array
+
+# recommendation_images()
