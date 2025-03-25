@@ -562,16 +562,10 @@ if st.session_state.page == "Connections":
 
 
         response = requests.get(url, params=user_input).json()
-        # print(f"ESSA é a response: {top_5_similar_people}")
-        # print(type(top_5_similar_people))
 
         top_5_similar_people = pd.DataFrame(response['recommendations'])
-        st.write(list(top_5_similar_people.index))
-
-        ## Tenho que passar os ids para pegar as imagens
 
         ids = top_5_similar_people.index.to_list()
-        st.markdown(ids)
 
         img_url = "http://localhost:8000/images"
 

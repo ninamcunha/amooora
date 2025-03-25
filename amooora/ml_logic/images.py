@@ -23,6 +23,8 @@ def retrieve_images(id: int) -> None:
     filename_img = os.path.join(PROJECT_FOLDER, "raw_data", "female_images_df.csv")
     images_df = pd.read_csv(filename_img).dropna()
 
+    images_df = images_df.drop_duplicates(subset='image_path')
+
     ## create age min and age max from range
     images_df[['age_min', 'age_max']] = images_df['age'].str.extract(r'\((\d+)-(\d+)\)').astype(int)
 
