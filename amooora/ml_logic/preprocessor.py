@@ -13,6 +13,8 @@ from amooora.ml_logic.registry import load_text_length_scaler
 def preprocess_texts(df: pd.DataFrame) -> pd.DataFrame:
     nltk.download('punkt_tab')
     nltk.download('stopwords')
+    nltk.download('wordnet')
+
     def basic_preprocessing(sentence):
         tokenized_sentence = word_tokenize(sentence) ## tokenize
 
