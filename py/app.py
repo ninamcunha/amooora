@@ -592,7 +592,7 @@ if st.session_state.page == "Connections":
             image = Image.open(io.BytesIO(img_responses[i-1].content))
             with st.container(border=True):
                 with col_image:
-                    st.image(image)
+                    st.image(image, width=160)
                 with col_bio:
                     st.write(bio)  # Display the bio as a single block of text
             st.write("---")  # Add a separator between bios
