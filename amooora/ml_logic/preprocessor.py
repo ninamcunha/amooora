@@ -8,10 +8,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MinMaxScaler
 from amooora.utils import simple_time_and_memory_tracker
 from amooora.ml_logic.registry import load_text_length_scaler
-nltk.download('punkt_tab')
 
 @simple_time_and_memory_tracker
 def preprocess_texts(df: pd.DataFrame) -> pd.DataFrame:
+    nltk.download('punkt_tab')
+    nltk.download('stopwords')
     def basic_preprocessing(sentence):
         tokenized_sentence = word_tokenize(sentence) ## tokenize
 
