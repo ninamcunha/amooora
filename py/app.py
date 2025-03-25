@@ -566,21 +566,23 @@ if st.session_state.page == "Connections":
         # print(type(top_5_similar_people))
 
         top_5_similar_people = pd.DataFrame(response['recommendations'])
-        st.write(top_5_similar_people)
+        st.write(list(top_5_similar_people.index))
 
         ## Tenho que passar os ids para pegar as imagens
-        # img_url = "http://localhost:8000/images"
-        # img_response = requests.get(img_url).json()
-        # print("##### IMG RESPONSE #####")
-        # print(img_response)
-        # st.write(img_response)
+
+        ids = top_5_similar_people.index.to_list()
+        st.markdown(ids)
+
+        params = {}
+        for i, idx in enumerate(ids):
+            params[f'id_{i}'] = idx
 
         img_url = "http://localhost:8000/images"
-        img_response = requests.get(img_url)
+        img_response = requests.get(img_url, params=params)
 
-        if img_response.status_code == 200:
-            image = Image.open(io.BytesIO(img_response.content))
-            st.image(image)  # Display the image
+        # if img_response.status_code == 200:
+        image = Image.open(io.BytesIO(img_response.content))
+        st.image(image)  # Display the image
 
 
         # Display the bios of the top 5 matches

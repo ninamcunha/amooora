@@ -2,7 +2,7 @@ import io
 import pandas as pd
 from fastapi import FastAPI, Response
 from amooora.interface.main_local import clean_and_preprocess
-from amooora.ml_logic.images import recommendation_images
+from amooora.ml_logic.images import recommendation_images, retrieve_images
 app = FastAPI()
 
 
@@ -96,22 +96,26 @@ def recommend(
 
 
 @app.get('/images')
-def images():
-    # image_as_array = recommendation_images()
+def images(id_0: int, id_1: int, id_2: int, id_3: int, id_4: int):
+    print("!!!! RODANDO API ENDPOINT !!!!")
 
-    # print(type(image_as_array))
+    # usar retrieve images para enviar o id e receber o file path
 
-    # return {
-    #     'image_array': image_as_array.tolist()
-    # }
-    # GPT
-    image = recommendation_images()
+    image_paths = []
 
-    if image is None:
-        return Response(content="Image not found", status_code=404)
+    for idx in [id_0, id_1, id_2, id_3, id_4]:
+        image_path = retrieve_images(idx)
+        image_paths.append(image_path)
 
-    img_bytes = io.BytesIO()
-    image.save(img_bytes, format="PNG")  # Change format if needed (PNG, JPEG, etc.)
-    img_bytes.seek(0)
+    print(image_paths)
 
-    return Response(content=img_bytes.getvalue(), media_type="image/png")
+    # image = recommendation_images()
+
+    # if image is None:
+    #     return Response(content="Image not found", status_code=404)
+
+    # img_bytes = io.BytesIO()
+    # image.save(img_bytes, format="PNG")  # Change format if needed (PNG, JPEG, etc.)
+    # img_bytes.seek(0)
+
+    # return Response(content=img_bytes.getvalue(), media_type="image/png")

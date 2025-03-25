@@ -56,6 +56,7 @@ def recommendation_images():
     PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     filename = os.path.join(PROJECT_FOLDER, "female_images", "flamengo-flag.jpg")
     # image_path = '../../female_images/flamengo-flag.jpg'
+
     if not os.path.exists(filename):
         return None
 
@@ -70,4 +71,4 @@ def recommendation_images():
     return image
     # retornar o numpy array
 
-recommendation_images()
+# recommendation_images()
