@@ -143,7 +143,7 @@ st.markdown(
 # Initialize session state for page navigation
 if "page" not in st.session_state:
     st.session_state.page = "Connections"
-    
+
 # Custom CSS to center the navigation menu and page content
 st.markdown(
     """
@@ -187,7 +187,7 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
-)  
+)
 # Navigation Menu
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -202,7 +202,7 @@ with col3:
 with col4:
     if st.button("The Team"):
         st.session_state.page = "The Team"
-        
+
 
 # Display the appropriate header image based on the current page
 if st.session_state.page == "Connections":
@@ -233,7 +233,7 @@ if st.session_state.page == "Connections":
 
     # Column 1
     with col1:
-        
+
         # Name field (not used for analysis)
         user_input['name'] = st.text_input("Name")
 
@@ -251,7 +251,7 @@ if st.session_state.page == "Connections":
         # Gender
         gender_options = ["Female", "Male", "Non-Binary", "Transgender", "Other"]
         selected_gender = st.radio("Gender", gender_options, index=0)  # index=0 makes Female selected
-        
+
         if selected_gender == "Male":
             container = st.container()
 
@@ -286,16 +286,16 @@ if st.session_state.page == "Connections":
 
             # Relationship Status
         user_input['single'] = st.radio("Relationship Status", ["Single", "In a Relationship"])
-        user_input['single'] = 1 if user_input['single'] == "Single" else 0 
-            
+        user_input['single'] = 1 if user_input['single'] == "Single" else 0
+
     # Column 2
     with col2:
-        
+
         # Orientation
         orientation = st.radio("Orientation", [
             "Queer",
             "Lesbian",
-            "Bisexual/Pansexual", 
+            "Bisexual/Pansexual",
             "Asexual",
             "Questioning",
             "Straight"
@@ -342,10 +342,10 @@ if st.session_state.page == "Connections":
         user_input['education_status_graduated'] = 1 if education_status == "Graduated" else 0
         user_input['education_status_working'] = 1 if education_status == "In progress" else 0
 
-    
+
     # Column 3
     with col3:
-    
+
     # Initialize session state for checkboxes
         if "english_checked" not in st.session_state:
             st.session_state.english_checked = False  # Default to checked
@@ -355,7 +355,7 @@ if st.session_state.page == "Connections":
             st.session_state.portuguese_checked = False
         if "other_checked" not in st.session_state:
             st.session_state.other_checked = False
-     
+
         # Languages Spoken
         # Languages Spoken
         st.write("Languages Spoken:")
@@ -457,7 +457,7 @@ if st.session_state.page == "Connections":
         user_input['essay2'] = st.text_input("What is your third favorite hobby?", key="essay2_input")
         user_input['essay3'] = st.text_input("What is your favorite movie genre?", key="essay3_input")
         user_input['essay4'] = st.text_input("What is your favorite music genre?", key="essay4_input")
-        
+
     # Column 5
     with col5:
         user_input['essay5'] = st.text_input("What is your dream travel destination?", key="essay5_input")
@@ -470,7 +470,7 @@ if st.session_state.page == "Connections":
     for i in range(10):
         user_input[f'essay{i}'] = ""  # Placeholder for essay variables
 
-        
+
     # Custom CSS to center the button
     # Add a unique class to the "Find Connections" button
     st.markdown(
@@ -493,10 +493,10 @@ if st.session_state.page == "Connections":
 
     # Predict matches when the user submits the form
     if st.button("Find Connections"):
-        
+
         for i in range(10):
             user_input[f'essay{i}'] = st.session_state.get(f'essay{i}_input', '')
-            
+
         # Convert user input to a DataFrame
         user_input_df = pd.DataFrame([user_input])
 
@@ -524,27 +524,27 @@ if st.session_state.page == "Connections":
             st.success("Form Submitted!")
         except Exception as e:
             st.error(f"Failed to submit the form: {str(e)}")
-                
+
         # Ensure the DataFrame has all the required columns in the correct order
         required_columns = [
-            'female', 'age_scaled', 'single', 'height_scaled', 'orientation_bisexual', 
-            'orientation_gay', 'orientation_straight', 'education_type_college_univ', 
-            'education_type_grad_or_professional_edu', 'education_type_not_disclosed', 
-            'education_type_two_year_college_or_less', 'education_status_graduated', 
-            'education_status_not_disclosed', 'education_status_working', 'speaks_english', 
-            'speaks_spanish', 'speaks_portuguese', 'speaks_other', 'diet_type_vegetarian', 
-            'has_dogs_yes', 'no_of_kids_more_than_one', 'no_of_kids_one', 'text_length_scaled', 
-            'topic_0_from_two', 'hobby_1', 'hobby_2', 'hobby_3', 'movie_genre', 'music_genre', 
-            'travel_destination', 'book_genre', 'sport', 'food', 'essay0', 'essay1', 'essay2', 
+            'female', 'age_scaled', 'single', 'height_scaled', 'orientation_bisexual',
+            'orientation_gay', 'orientation_straight', 'education_type_college_univ',
+            'education_type_grad_or_professional_edu', 'education_type_not_disclosed',
+            'education_type_two_year_college_or_less', 'education_status_graduated',
+            'education_status_not_disclosed', 'education_status_working', 'speaks_english',
+            'speaks_spanish', 'speaks_portuguese', 'speaks_other', 'diet_type_vegetarian',
+            'has_dogs_yes', 'no_of_kids_more_than_one', 'no_of_kids_one', 'text_length_scaled',
+            'topic_0_from_two', 'hobby_1', 'hobby_2', 'hobby_3', 'movie_genre', 'music_genre',
+            'travel_destination', 'book_genre', 'sport', 'food', 'essay0', 'essay1', 'essay2',
             'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9'
         ]
-        
+
         # Reindex the DataFrame to match the required columns and fill missing values with 0
         user_input_df = user_input_df.reindex(columns=required_columns, fill_value=0)
-        
+
         # Call your prediction function
         top_5_similar_people = predict_similar_people(user_input_df)
-        
+
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
         for i, bio in enumerate(top_5_similar_people['bio'], start=1):
@@ -557,20 +557,20 @@ if st.session_state.page == "Connections":
 elif st.session_state.page == "About":
     st.write("## About Amooora and the project")
     st.write("""
-    Amooora is a transformative platform designed to create a world of belonging and freedom, with a focus on the LGBTQ+ community in Brazil. 
-    It serves as a safe and inclusive space for cisgender women, bisexual individuals, transgender people, and non-binary individuals to find visibility, representation, and meaningful connections. 
+    Amooora is a transformative platform designed to create a world of belonging and freedom, with a focus on the LGBTQ+ community in Brazil.
+    It serves as a safe and inclusive space for cisgender women, bisexual individuals, transgender people, and non-binary individuals to find visibility, representation, and meaningful connections.
     Our mission is to empower this vibrant community by offering high-quality content, information, and services created by and for them.
-    
-    Amooora fills a critical gap by uniting the Brazilian lesbian community, which has long lacked a dedicated platform for connection and specialized resources. 
-    Through features like a community map, users can discover and connect with others who share their interests and values. 
+
+    Amooora fills a critical gap by uniting the Brazilian lesbian community, which has long lacked a dedicated platform for connection and specialized resources.
+    Through features like a community map, users can discover and connect with others who share their interests and values.
     The platform also acts as a marketplace, enabling women to offer or access professional services—from legal and psychological support to creative and technical expertise—creating a trusted network for growth and collaboration.
-    
-    For this specific project, we use a dataset from OkCupid to explore innovative ways of creating meaningful connections. 
-    By analyzing patterns and similarities within the data, we aim to develop a model that fosters genuine relationships within the community. 
+
+    For this specific project, we leverage a dataset from OkCupid to explore deep learning models and innovative approaches for creating meaningful connections.
+    By analyzing patterns and similarities within the data, we aim to develop a model that fosters genuine relationships within the community.
     For more details on our approach, please refer to the Methodology section.
-    
-    More than just a platform, Amooora is a movement celebrating diversity and fostering authentic connections. 
-    By joining us, you become part of a community that empowers individuals to live freely and find their place in the world. 
+
+    More than just a platform, Amooora is a movement celebrating diversity and fostering authentic connections.
+    By joining us, you become part of a community that empowers individuals to live freely and find their place in the world.
     Together, we can build a future where everyone belongs.
     """)
 
@@ -578,23 +578,49 @@ elif st.session_state.page == "About":
 # Methodology Page
 elif st.session_state.page == "Methodology":
     st.write("## Methodology")
-        
-    st.write("""
-    For this project, we worked with the **OK Cupid dataset**, which contains nearly **60,000 observations** and **31 columns** of user profile information. 
-    The dataset, available on [Kaggle](https://www.kaggle.com/datasets/andrewmvd/okcupid-profiles/code), includes details such as demographics, interests, and personal preferences. 
-    Since the dataset does not include information about user interactions or matches, we explored a **deep learning model** to suggest meaningful connections based on **similarity**. 
-    Our goal was to create a robust model that could effectively group users with shared characteristics and interests.
-    """)
 
+    st.write("""
+    For this project, we worked with data from OkCupid, a popular dating platform known for its comprehensive user profiles and matching algorithms. 
+    The original dataset contained nearly 60,000 observations and 31 columns of detailed profile information. To better align with Amooora's focus 
+    on LGBTQ+ women, transgender, and non-binary individuals, we filtered the dataset to exclude male profiles, resulting in 24,117 observations.
+    While the dataset includes some LGBTQ+ individuals, they are not well-represented in the data. We worked with all available women's profiles (both queer and straight) 
+    to train our model, as this provided the most robust training set available.
+
+    The dataset, available on [Kaggle](https://www.kaggle.com/datasets/andrewmvd/okcupid-profiles/code), includes details such as demographics, interests, and personal preferences. 
+    Since it doesn't contain information about actual user interactions or matches, we explored deep learning models to suggest 
+    meaningful connections based on profile similarity. Our goal was to create a robust model that could effectively 
+    group users with shared characteristics and interests.
+
+    This project serves as an exercise in developing better connection algorithms - ideally, we would have preferred working 
+    with a dataset exclusively containing LGBTQ+ individuals, but such dataset was not found during our research. 
+    We will continue refining these models once the Amooora app launches and we can collect our own community-specific data.
+    """)
+    
     st.write("### Model Exploration")
     st.write("""
     We began by evaluating three clustering models to determine the best approach for grouping users based on similarity. The models explored were:
-    1. **K-Nearest Neighbors (KNN)**
-    2. **K-Means Clustering**
-    3. **DBSCAN (Density-Based Spatial Clustering of Applications with Noise)**
-
-    The performance of each model was assessed using metrics such as **Silhouette Score**, **Inertia (SSE)**, **Davies-Bouldin Index**, and others. Below is a comparison of the models:
     """)
+
+    st.write("""
+    **K-Nearest Neighbors (KNN)**  
+    This distance-based approach identifies each user's 5 most similar profiles using Euclidean distance across all features. While conceptually straightforward, its performance suffered in our high-dimensional space where distance metrics become less meaningful, and it required expensive pairwise computations across the entire dataset.
+    """)
+
+    st.write("""
+    **K-Means Clustering**  
+    We first grouped profiles into 12 thematic clusters based on personality dimensions, then calculated Euclidean distances within each cluster to generate the final 5 recommendations. This two-stage approach helped maintain thematic consistency while ensuring we met our target recommendation volume.
+    """)
+
+    st.write("""
+    **DBSCAN (Density-Based Clustering)**  
+    Our top performer naturally identified communities based on profile density patterns. For users in sparse regions where DBSCAN couldn't find 5 organic matches, we supplemented recommendations using Euclidean distance from adjacent dense clusters - ensuring everyone receives 5 quality matches while preserving the algorithm's ability to discover authentic communities.
+    """)
+
+    st.write("""
+    The quantitative comparison below demonstrates why DBSCAN's adaptive approach succeeded where others struggled:
+    """)
+
+    st.write("The quantitative comparison below confirms DBSCAN's superior performance:")
 
     model_comparison_data = {
         "Model": ["KNN", "KMeans", "DBSCAN"],
@@ -612,22 +638,39 @@ elif st.session_state.page == "Methodology":
 
     st.write("""
     ##### Best Model:
-    1️⃣ **Model 3 (DBSCAN)** – Best overall, with the highest Silhouette score and lowest Davies-Bouldin score.  
-    2️⃣ **Model 2 (KMeans)** – A solid choice, though with lower performance than DBSCAN.  
+    1️⃣ **Model 3 (DBSCAN)** – Best overall, with the highest Silhouette score and lowest Davies-Bouldin score.
+    2️⃣ **Model 2 (KMeans)** – A solid choice, though with lower performance than DBSCAN.
     3️⃣ **Model 1 (KNN)** – The least favorable based on clustering metrics (e.g., no Silhouette or Davies-Bouldin score).
     """)
 
     st.write("### Text Column Reduction")
     st.write("""
-    To handle the text columns in the dataset, we applied **Latent Dirichlet Allocation (LDA)** for topic modeling. 
-    This approach reduced the dimensionality of the text data by identifying key topics within user profiles. 
-    We compared several text reduction methods to determine the most effective approach:
+    To handle the open-ended responses in the dataset, we implemented several text processing approaches. Before applying any models, we performed comprehensive text cleaning including tokenization and lemmatization. We then evaluated multiple techniques:
+    """)
+
+    st.write("""
+    **1. Clustering Approaches**  
+    - **Text KMeans Cluster**: Used K-means with 5 clusters to group profiles based on their open-ended responses  
+    - **Therapist**: Employed [BERT-base fine-tuned for therapy topics](https://huggingface.co/AIPsy/bert-base-therapist-topic-classification-eng) (psychotherapeutic context classification)  
+    - **General**: Used [TopicClassifier-NoURL](https://huggingface.co/WebOrganizer/TopicClassifier-NoURL) (gte-base-en-v1.5 model fine-tuned on 1.1M web documents) which classifies into 17 categories  
+
+    **2. Topic Modeling**  
+    - **5 LDA Topics**: Latent Dirichlet Allocation identifying 5 latent topics  
+    - **2 LDA Topics**: Simplified version identifying 2 dominant topics  
+
+    **3. Dimensionality Reduction**  
+    - **PCA SDV**: Truncated SVD followed by PCA reduction to 2 components  
+    - **PCA Word2Vec**: Word2Vec embeddings processed through PCA  
+    - **PCA TF-IDF**: TF-IDF vectorizer outputs reduced via PCA  
+
+    All implementations shared the same preprocessing pipeline including stopword removal and text normalization.
     """)
 
    # Table 2: Text Reduction Model Comparison
+    st.write("Below is the comparative performance of each approach:")
     text_reduction_data = {
         "Model": [
-            "Text KMeans Cluster", "Therapist", "General", "5 LDA Topics", "2 LDA Topics", 
+            "Text KMeans Cluster", "Therapist", "General", "5 LDA Topics", "2 LDA Topics",
             "PCA SDV", "PCA Word2Vec", "PCA TF-IDF"
         ],
         "Silhouette ↑": [0.1844, 0.1686, 0.1982, 0.1453, 0.2209, 0.2060, 0.2075, 0.2060],
@@ -642,16 +685,16 @@ elif st.session_state.page == "Methodology":
 
     st.write("""
     ##### **Best Models:**
-    1️⃣ **Model 5 (2 LDA Topics)** – Best overall with the highest Silhouette score, a moderate Davies-Bouldin score, and relatively low AMD.  
-    2️⃣ **Model 6 (PCA SDV)** – Solid second choice with a good balance of performance and lower AMD compared to the others.  
-    3️⃣ **Model 7 (PCA Word2Vec)** – Strong contender with a slight increase in Silhouette and lower AMD than other models.  
+    1️⃣ **Model 5 (2 LDA Topics)** – Best overall with the highest Silhouette score, a moderate Davies-Bouldin score, and relatively low AMD.
+    2️⃣ **Model 6 (PCA SDV)** – Solid second choice with a good balance of performance and lower AMD compared to the others.
+    3️⃣ **Model 7 (PCA Word2Vec)** – Strong contender with a slight increase in Silhouette and lower AMD than other models.
     4️⃣ **Model 8 (PCA TF-IDF)** – Same performance as Model 7, but more consistent.
     """)
 
     st.write("### Feature Selection Process")
     st.write("""
     To optimize the model, we conducted a thorough feature selection process. We started by adding features one by one and evaluating their impact on the model's performance. Below is a summary of the results:""")
-    
+
     st.write("##### Feature Inclusion One-by-One")
 
 # Create a DataFrame for the table
@@ -706,10 +749,19 @@ elif st.session_state.page == "Methodology":
 # Display the table using st.dataframe
     st.dataframe(df, use_container_width=True)
     
+    st.write("### CNN Models for Image Analysis (Proof of Concept)")
+    st.write("""
+    As an experimental exercise, we implemented CNN models to generate profile pictures for our recommendations—purely to visualize how matches might appear in a live app. Since the OkCupid dataset doesn't include actual photos, we used a separate [human faces dataset](https://www.kaggle.com/datasets/ashwingupta3012/human-faces) to create this demo feature. Our implementation included:
+    - An [age detection model](https://www.geeksforgeeks.org/age-and-gender-detection-using-opencv-in-python/) (OpenCV/Caffe)  
+    - A [gender classifier](https://github.com/scoliann/GenderClassifierCNN) (TensorFlow/Keras)  
+
+    **Important note:** These generated images are synthetic placeholders and do not correspond to actual OkCupid users. We adapted the age brackets (18-20, 21-34, 35-49, 50-70) to better suit dating demographics, but this remains a technical demonstration rather than part of our core matching algorithm.
+    """)
+
     st.write("### Final Model and Features")
     st.write("""
-    After extensive testing, we selected **DBSCAN** as our best-performing model, combined with **2 LDA topics** for text reduction. 
-    The final model uses a combination of features including gender, age, relationship status, 
+    After extensive testing, we selected **DBSCAN** as our best-performing model, combined with **2 LDA topics** for text reduction.
+    The final model uses a combination of features including gender, age, relationship status,
    height, sexual orientation, education level and status, languages spoken, dietary preferences, pet ownership,  number of children, text length of open ended questions, and the dominant topic from the LDA approach.
     This combination of features and the DBSCAN model provided the best balance of clustering quality and interpretability, ensuring meaningful connections for users.
     """)
@@ -718,7 +770,7 @@ elif st.session_state.page == "Methodology":
 # The Team Page
 elif st.session_state.page == "The Team":
     st.write("## Meet the amazing team behind the project:")
-    
+
         # Custom CSS to adjust image alignment
     st.markdown(
         """
@@ -730,7 +782,7 @@ elif st.session_state.page == "The Team":
         """,
         unsafe_allow_html=True
     )
-    
+
     st.write("---")  # Add a separator between team members
 
     # Function to check if file exists
@@ -751,12 +803,12 @@ elif st.session_state.page == "The Team":
     with col2:
         st.write("### Nina Menezes Cunha")
         st.write("""
-        Nina Menezes Cunha is a data scientist with over a decade of experience in machine learning, causal inference, and impact evaluation. 
-        She holds a Ph.D. in Economics of Education from Stanford University and has expertise in predictive modeling, A/B testing, and big data analytics. 
-        In the U.S., she worked as a Senior Researcher at FHI 360 and consulted for the World Bank, contributing to peer-reviewed research and global projects. 
-        She has led data-driven policy research, built scalable data solutions, and collaborated with international organizations. 
-        After returning to Brazil, she founded Amooora, a startup focused on products and services for the lesbian community. 
-        She recently completed the Data Science Bootcamp at Le Wagon, further strengthening her expertise in AI and data science. 
+        Nina Menezes Cunha is a data scientist with over a decade of experience in machine learning, causal inference, and impact evaluation.
+        She holds a Ph.D. in Economics of Education from Stanford University and has expertise in predictive modeling, A/B testing, and big data analytics.
+        In the U.S., she worked as a Senior Researcher at FHI 360 and consulted for the World Bank, contributing to peer-reviewed research and global projects.
+        She has led data-driven policy research, built scalable data solutions, and collaborated with international organizations.
+        After returning to Brazil, she founded Amooora, a startup focused on products and services for the lesbian community.
+        She recently completed the Data Science Bootcamp at Le Wagon, further strengthening her expertise in AI and data science.
         Passionate about using data for social good, she is committed to leveraging AI for meaningful impact.
         """)
 
@@ -771,9 +823,9 @@ elif st.session_state.page == "The Team":
     with col4:
         st.write("### Thais Felipelli")
         st.write("""
-        Thais Felipelli is a mechatronics engineer with experience in software development, specializing in Laboratory Information Management Systems (LIMS) 
-        to automate processes and enable data-driven decision-making. After earning an MBA from MIT, she transitioned into venture capital, 
-        playing a key role in developing and founding startups such as Evino. Combining a passion for math and technology, 
+        Thais Felipelli is a mechatronics engineer with experience in software development, specializing in Laboratory Information Management Systems (LIMS)
+        to automate processes and enable data-driven decision-making. After earning an MBA from MIT, she transitioned into venture capital,
+        playing a key role in developing and founding startups such as Evino. Combining a passion for math and technology,
         she completed the Data Science Bootcamp at Le Wagon, furthering her expertise in AI and data science.
         """)
 
@@ -788,9 +840,9 @@ elif st.session_state.page == "The Team":
     with col6:
         st.write("### André Menezes")
         st.write("""
-        André Menezes has a diverse professional background, spanning civil engineering, economics, social communication, and the events industry 
-        before transitioning into tech. After completing the Web Development course at Le Wagon, he discovered a passion for coding and quickly 
-        joined the school as a Teacher Assistant. He was soon promoted to Teacher and later took on the role of Batch Manager, supporting students 
-        and overseeing program operations. With a growing interest in data science, he completed Le Wagon’s Data Science Bootcamp to expand his 
+        André Menezes has a diverse professional background, spanning civil engineering, economics, social communication, and the events industry
+        before transitioning into tech. After completing the Web Development course at Le Wagon, he discovered a passion for coding and quickly
+        joined the school as a Teacher Assistant. He was soon promoted to Teacher and later took on the role of Batch Manager, supporting students
+        and overseeing program operations. With a growing interest in data science, he completed Le Wagon’s Data Science Bootcamp to expand his
         expertise in AI and data-driven product development.
         """)
