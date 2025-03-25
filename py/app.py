@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from predict_matches import predict_similar_people  # Import the prediction function
 import os
 import requests
 
