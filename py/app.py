@@ -584,7 +584,7 @@ elif st.session_state.page == "About":
     Through features like a community map, users can discover and connect with others who share their interests and values.
     The platform also acts as a marketplace, enabling women to offer or access professional services—from legal and psychological support to creative and technical expertise—creating a trusted network for growth and collaboration.
 
-    For this specific project, we use a dataset from OkCupid to explore innovative ways of creating meaningful connections.
+    For this specific project, we leverage a dataset from OkCupid to explore deep learning models and innovative approaches for creating meaningful connections.
     By analyzing patterns and similarities within the data, we aim to develop a model that fosters genuine relationships within the community.
     For more details on our approach, please refer to the Methodology section.
 
@@ -599,21 +599,47 @@ elif st.session_state.page == "Methodology":
     st.write("## Methodology")
 
     st.write("""
-    For this project, we worked with the **OK Cupid dataset**, which contains nearly **60,000 observations** and **31 columns** of user profile information.
-    The dataset, available on [Kaggle](https://www.kaggle.com/datasets/andrewmvd/okcupid-profiles/code), includes details such as demographics, interests, and personal preferences.
-    Since the dataset does not include information about user interactions or matches, we explored a **deep learning model** to suggest meaningful connections based on **similarity**.
-    Our goal was to create a robust model that could effectively group users with shared characteristics and interests.
-    """)
+    For this project, we worked with data from OkCupid, a popular dating platform known for its comprehensive user profiles and matching algorithms. 
+    The original dataset contained nearly 60,000 observations and 31 columns of detailed profile information. To better align with Amooora's focus 
+    on LGBTQ+ women, transgender, and non-binary individuals, we filtered the dataset to exclude male profiles, resulting in 24,117 observations.
+    While the dataset includes some LGBTQ+ individuals, they are not well-represented in the data. We worked with all available women's profiles (both queer and straight) 
+    to train our model, as this provided the most robust training set available.
 
+    The dataset, available on [Kaggle](https://www.kaggle.com/datasets/andrewmvd/okcupid-profiles/code), includes details such as demographics, interests, and personal preferences. 
+    Since it doesn't contain information about actual user interactions or matches, we explored deep learning models to suggest 
+    meaningful connections based on profile similarity. Our goal was to create a robust model that could effectively 
+    group users with shared characteristics and interests.
+
+    This project serves as an exercise in developing better connection algorithms - ideally, we would have preferred working 
+    with a dataset exclusively containing LGBTQ+ individuals, but such dataset was not found during our research. 
+    We will continue refining these models once the Amooora app launches and we can collect our own community-specific data.
+    """)
+    
     st.write("### Model Exploration")
     st.write("""
     We began by evaluating three clustering models to determine the best approach for grouping users based on similarity. The models explored were:
-    1. **K-Nearest Neighbors (KNN)**
-    2. **K-Means Clustering**
-    3. **DBSCAN (Density-Based Spatial Clustering of Applications with Noise)**
-
-    The performance of each model was assessed using metrics such as **Silhouette Score**, **Inertia (SSE)**, **Davies-Bouldin Index**, and others. Below is a comparison of the models:
     """)
+
+    st.write("""
+    **K-Nearest Neighbors (KNN)**  
+    This distance-based approach identifies each user's 5 most similar profiles using Euclidean distance across all features. While conceptually straightforward, its performance suffered in our high-dimensional space where distance metrics become less meaningful, and it required expensive pairwise computations across the entire dataset.
+    """)
+
+    st.write("""
+    **K-Means Clustering**  
+    We first grouped profiles into 12 thematic clusters based on personality dimensions, then calculated Euclidean distances within each cluster to generate the final 5 recommendations. This two-stage approach helped maintain thematic consistency while ensuring we met our target recommendation volume.
+    """)
+
+    st.write("""
+    **DBSCAN (Density-Based Clustering)**  
+    Our top performer naturally identified communities based on profile density patterns. For users in sparse regions where DBSCAN couldn't find 5 organic matches, we supplemented recommendations using Euclidean distance from adjacent dense clusters - ensuring everyone receives 5 quality matches while preserving the algorithm's ability to discover authentic communities.
+    """)
+
+    st.write("""
+    The quantitative comparison below demonstrates why DBSCAN's adaptive approach succeeded where others struggled:
+    """)
+
+    st.write("The quantitative comparison below confirms DBSCAN's superior performance:")
 
     model_comparison_data = {
         "Model": ["KNN", "KMeans", "DBSCAN"],
@@ -638,12 +664,29 @@ elif st.session_state.page == "Methodology":
 
     st.write("### Text Column Reduction")
     st.write("""
-    To handle the text columns in the dataset, we applied **Latent Dirichlet Allocation (LDA)** for topic modeling.
-    This approach reduced the dimensionality of the text data by identifying key topics within user profiles.
-    We compared several text reduction methods to determine the most effective approach:
+    To handle the open-ended responses in the dataset, we implemented several text processing approaches. Before applying any models, we performed comprehensive text cleaning including tokenization and lemmatization. We then evaluated multiple techniques:
+    """)
+
+    st.write("""
+    **1. Clustering Approaches**  
+    - **Text KMeans Cluster**: Used K-means with 5 clusters to group profiles based on their open-ended responses  
+    - **Therapist**: Employed [BERT-base fine-tuned for therapy topics](https://huggingface.co/AIPsy/bert-base-therapist-topic-classification-eng) (psychotherapeutic context classification)  
+    - **General**: Used [TopicClassifier-NoURL](https://huggingface.co/WebOrganizer/TopicClassifier-NoURL) (gte-base-en-v1.5 model fine-tuned on 1.1M web documents) which classifies into 17 categories  
+
+    **2. Topic Modeling**  
+    - **5 LDA Topics**: Latent Dirichlet Allocation identifying 5 latent topics  
+    - **2 LDA Topics**: Simplified version identifying 2 dominant topics  
+
+    **3. Dimensionality Reduction**  
+    - **PCA SDV**: Truncated SVD followed by PCA reduction to 2 components  
+    - **PCA Word2Vec**: Word2Vec embeddings processed through PCA  
+    - **PCA TF-IDF**: TF-IDF vectorizer outputs reduced via PCA  
+
+    All implementations shared the same preprocessing pipeline including stopword removal and text normalization.
     """)
 
    # Table 2: Text Reduction Model Comparison
+    st.write("Below is the comparative performance of each approach:")
     text_reduction_data = {
         "Model": [
             "Text KMeans Cluster", "Therapist", "General", "5 LDA Topics", "2 LDA Topics",
@@ -724,6 +767,15 @@ elif st.session_state.page == "Methodology":
 
 # Display the table using st.dataframe
     st.dataframe(df, use_container_width=True)
+    
+    st.write("### CNN Models for Image Analysis (Proof of Concept)")
+    st.write("""
+    As an experimental exercise, we implemented CNN models to generate profile pictures for our recommendations—purely to visualize how matches might appear in a live app. Since the OkCupid dataset doesn't include actual photos, we used a separate [human faces dataset](https://www.kaggle.com/datasets/ashwingupta3012/human-faces) to create this demo feature. Our implementation included:
+    - An [age detection model](https://www.geeksforgeeks.org/age-and-gender-detection-using-opencv-in-python/) (OpenCV/Caffe)  
+    - A [gender classifier](https://github.com/scoliann/GenderClassifierCNN) (TensorFlow/Keras)  
+
+    **Important note:** These generated images are synthetic placeholders and do not correspond to actual OkCupid users. We adapted the age brackets (18-20, 21-34, 35-49, 50-70) to better suit dating demographics, but this remains a technical demonstration rather than part of our core matching algorithm.
+    """)
 
     st.write("### Final Model and Features")
     st.write("""
