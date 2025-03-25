@@ -1,7 +1,10 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import os
 import requests
+from PIL import Image
+import io
 
 # Get the directory containing app.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -551,7 +554,7 @@ if st.session_state.page == "Connections":
         print("###########################")
         print("###########################")
 
-        url = "https://amooora-768760105976.europe-west1.run.app/recommend"
+        url = "http://localhost:8000/recommend"
         endpoint_url = url + f"?{''.join('{}={}&'.format(key, val) for key, val in user_input.items())}"
 
         user_input.pop('name')
@@ -563,6 +566,22 @@ if st.session_state.page == "Connections":
         # print(type(top_5_similar_people))
 
         top_5_similar_people = pd.DataFrame(response['recommendations'])
+        st.write(top_5_similar_people)
+
+        ## Tenho que passar os ids para pegar as imagens
+        # img_url = "http://localhost:8000/images"
+        # img_response = requests.get(img_url).json()
+        # print("##### IMG RESPONSE #####")
+        # print(img_response)
+        # st.write(img_response)
+
+        img_url = "http://localhost:8000/images"
+        img_response = requests.get(img_url)
+
+        if img_response.status_code == 200:
+            image = Image.open(io.BytesIO(img_response.content))
+            st.image(image)  # Display the image
+
 
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
@@ -570,7 +589,6 @@ if st.session_state.page == "Connections":
             st.write(f"#### Connection {i}")
             st.write(bio)  # Display the bio as a single block of text
             st.write("---")  # Add a separator between bios
-
 
 # About Page
 elif st.session_state.page == "About":

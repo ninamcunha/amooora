@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import numpy as np
+from PIL import Image
 
 def retrieve_images(id: int) -> None:
     print(f"id dentro de retrieve images: {id}")
@@ -46,3 +48,26 @@ def retrieve_images(id: int) -> None:
         print("No matching row found.")
 
     return f"Recommendation age is {recommendation_age}"
+
+
+
+def recommendation_images():
+    # Acessar a imagem no caminho correto
+    PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    filename = os.path.join(PROJECT_FOLDER, "female_images", "flamengo-flag.jpg")
+    # image_path = '../../female_images/flamengo-flag.jpg'
+    if not os.path.exists(filename):
+        return None
+
+    ## abrir a imagem usando PIL
+    # assim vai conseguir ser interpretado pelo numpy
+    image = Image.open(filename)
+
+    #  covert pra um ndarray nauqelas 3 dimensoes das aulas
+    # image_array = np.array(image)
+    # breakpoint()
+
+    return image
+    # retornar o numpy array
+
+recommendation_images()

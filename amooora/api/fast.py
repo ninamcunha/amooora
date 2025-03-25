@@ -1,7 +1,8 @@
+import io
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from amooora.interface.main_local import clean_and_preprocess
-
+from amooora.ml_logic.images import recommendation_images
 app = FastAPI()
 
 
@@ -92,3 +93,25 @@ def recommend(
     return {
         'recommendations': recommendations
     }
+
+
+@app.get('/images')
+def images():
+    # image_as_array = recommendation_images()
+
+    # print(type(image_as_array))
+
+    # return {
+    #     'image_array': image_as_array.tolist()
+    # }
+    # GPT
+    image = recommendation_images()
+
+    if image is None:
+        return Response(content="Image not found", status_code=404)
+
+    img_bytes = io.BytesIO()
+    image.save(img_bytes, format="PNG")  # Change format if needed (PNG, JPEG, etc.)
+    img_bytes.seek(0)
+
+    return Response(content=img_bytes.getvalue(), media_type="image/png")
