@@ -552,7 +552,7 @@ if st.session_state.page == "Connections":
         print("###########################")
         print("###########################")
 
-        url = "http://127.0.0.1:8000/recommend"
+        url = "https://amooora-768760105976.europe-west1.run.app/recommend"
         endpoint_url = url + f"?{''.join('{}={}&'.format(key, val) for key, val in user_input.items())}"
 
         user_input.pop('name')
