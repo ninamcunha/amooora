@@ -1,8 +1,11 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import os
 import requests
 import time
+from PIL import Image
+import io
 
 # Get the directory containing app.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -584,13 +587,37 @@ if st.session_state.page == "Connections":
             top_5_similar_people = pd.DataFrame(response['recommendations'])
             time.sleep(10)
 
+        ids = top_5_similar_people.index.to_list()
+
+        img_url = "https://amooora-768760105976.europe-west1.run.app/images"
+
+        img_responses = []
+
+        for i, idx in enumerate(ids):
+            # params[f'id_{i}'] = idx
+            img_response = requests.get(img_url, params={"idx": idx})
+            img_responses.append(img_response)
+
+        print(img_responses)
+
+        # for img_response in img_responses:
+        #     print(img_response)
+        #     image = Image.open(io.BytesIO(img_response.content))
+        #     st.image(image)  # Display the image
+
+
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
         for i, bio in enumerate(top_5_similar_people['bio'], start=1):
             st.write(f"#### Connection {i}")
-            st.write(bio)  # Display the bio as a single block of text
+            col_image, col_bio = st.columns([2.5,5])
+            image = Image.open(io.BytesIO(img_responses[i-1].content))
+            with st.container(border=True):
+                with col_image:
+                    st.image(image, width=160)
+                with col_bio:
+                    st.write(bio)  # Display the bio as a single block of text
             st.write("---")  # Add a separator between bios
-
 
 # About Page
 elif st.session_state.page == "About":
@@ -612,20 +639,20 @@ elif st.session_state.page == "About":
     By joining us, you become part of a community that empowers individuals to live freely and find their place in the world.
     Together, we can build a future where everyone belongs.
     """)
-    
+
 
 elif st.session_state.page == "Context":
 
 
     st.write('### Understanding the broader landscape of LGBTQIAP+ community needs')
-    
+
     # First content section
     st.markdown(" ")
     st.markdown(" ")
     safety_image_path = os.path.join(current_dir, "..", "images", "pitch_safety.png")
     st.image(safety_image_path, caption="Creating safe spaces remains a crucial need for many community members")
     #st.write("#### Creating safe spaces remains a crucial need for many community members.")
-    
+
 
 
     st.markdown(" ")  # Divider between sections
@@ -637,46 +664,46 @@ elif st.session_state.page == "Context":
     st.image(money_image_path, caption="The LGBTQIAP+ community represents significant purchasing power and economic influence.")
    # st.write("#### The LGBTQIAP+ community represents significant purchasing power and economic influence.")
 
-    
+
 
 # Methodology Page
 elif st.session_state.page == "Methodology":
     st.write("## Methodology")
 
     st.write("""
-    For this project, we worked with data from OkCupid, a popular dating platform known for its comprehensive user profiles and matching algorithms. 
-    The original dataset contained nearly 60,000 observations and 31 columns of detailed profile information. To better align with Amooora's focus 
+    For this project, we worked with data from OkCupid, a popular dating platform known for its comprehensive user profiles and matching algorithms.
+    The original dataset contained nearly 60,000 observations and 31 columns of detailed profile information. To better align with Amooora's focus
     on LGBTQ+ women, transgender, and non-binary individuals, we filtered the dataset to exclude male profiles, resulting in 24,117 observations.
-    While the dataset includes some LGBTQ+ individuals, they are not well-represented in the data. We worked with all available women's profiles (both queer and straight) 
+    While the dataset includes some LGBTQ+ individuals, they are not well-represented in the data. We worked with all available women's profiles (both queer and straight)
     to train our model, as this provided the most robust training set available.
 
-    The dataset, available on [Kaggle](https://www.kaggle.com/datasets/andrewmvd/okcupid-profiles/code), includes details such as demographics, interests, and personal preferences. 
-    Since it doesn't contain information about actual user interactions or matches, we explored deep learning models to suggest 
-    meaningful connections based on profile similarity. Our goal was to create a robust model that could effectively 
+    The dataset, available on [Kaggle](https://www.kaggle.com/datasets/andrewmvd/okcupid-profiles/code), includes details such as demographics, interests, and personal preferences.
+    Since it doesn't contain information about actual user interactions or matches, we explored deep learning models to suggest
+    meaningful connections based on profile similarity. Our goal was to create a robust model that could effectively
     group users with shared characteristics and interests.
 
-    This project serves as an exercise in developing better connection algorithms - ideally, we would have preferred working 
-    with a dataset exclusively containing LGBTQ+ individuals, but such dataset was not found during our research. 
+    This project serves as an exercise in developing better connection algorithms - ideally, we would have preferred working
+    with a dataset exclusively containing LGBTQ+ individuals, but such dataset was not found during our research.
     We will continue refining these models once the Amooora app launches and we can collect our own community-specific data.
     """)
-    
+
     st.write("### Model Exploration")
     st.write("""
     We evaluated three clustering models to determine the best approach for grouping users based on similarity. The models explored were:
     """)
 
     st.write("""
-    **K-Nearest Neighbors (KNN)**  
+    **K-Nearest Neighbors (KNN)**
     This distance-based approach identifies each user's 5 most similar profiles using Euclidean distance across all features. While conceptually straightforward, its performance suffered in our high-dimensional space where distance metrics become less meaningful, and it required expensive pairwise computations across the entire dataset.
     """)
 
     st.write("""
-    **K-Means Clustering**  
+    **K-Means Clustering**
     We first grouped profiles into 12 thematic clusters based on personality dimensions, then calculated Euclidean distances within each cluster to generate the final 5 recommendations. This two-stage approach helped maintain thematic consistency while ensuring we met our target recommendation volume.
     """)
 
     st.write("""
-    **DBSCAN (Density-Based Clustering)**  
+    **DBSCAN (Density-Based Clustering)**
     Our top performer naturally identified communities based on profile density patterns. For users in sparse regions where DBSCAN couldn't find 5 organic matches, we supplemented recommendations using Euclidean distance from adjacent dense clusters - ensuring everyone receives 5 quality matches while preserving the algorithm's ability to discover authentic communities.
     """)
 
@@ -713,19 +740,19 @@ elif st.session_state.page == "Methodology":
     """)
 
     st.write("""
-    **1. Clustering Approaches**  
-    - **Text KMeans Cluster**: Used K-means with 5 clusters to group profiles based on their open-ended responses  
-    - **Therapist**: Employed [BERT-base fine-tuned for therapy topics](https://huggingface.co/AIPsy/bert-base-therapist-topic-classification-eng) (psychotherapeutic context classification)  
-    - **General**: Used [TopicClassifier-NoURL](https://huggingface.co/WebOrganizer/TopicClassifier-NoURL) (gte-base-en-v1.5 model fine-tuned on 1.1M web documents) which classifies into 17 categories  
+    **1. Clustering Approaches**
+    - **Text KMeans Cluster**: Used K-means with 5 clusters to group profiles based on their open-ended responses
+    - **Therapist**: Employed [BERT-base fine-tuned for therapy topics](https://huggingface.co/AIPsy/bert-base-therapist-topic-classification-eng) (psychotherapeutic context classification)
+    - **General**: Used [TopicClassifier-NoURL](https://huggingface.co/WebOrganizer/TopicClassifier-NoURL) (gte-base-en-v1.5 model fine-tuned on 1.1M web documents) which classifies into 17 categories
 
-    **2. Topic Modeling**  
-    - **5 LDA Topics**: Latent Dirichlet Allocation identifying 5 latent topics  
-    - **2 LDA Topics**: Simplified version identifying 2 dominant topics  
+    **2. Topic Modeling**
+    - **5 LDA Topics**: Latent Dirichlet Allocation identifying 5 latent topics
+    - **2 LDA Topics**: Simplified version identifying 2 dominant topics
 
-    **3. Dimensionality Reduction**  
-    - **PCA SDV**: Truncated SVD followed by PCA reduction to 2 components  
-    - **PCA Word2Vec**: Word2Vec embeddings processed through PCA  
-    - **PCA TF-IDF**: TF-IDF vectorizer outputs reduced via PCA  
+    **3. Dimensionality Reduction**
+    - **PCA SDV**: Truncated SVD followed by PCA reduction to 2 components
+    - **PCA Word2Vec**: Word2Vec embeddings processed through PCA
+    - **PCA TF-IDF**: TF-IDF vectorizer outputs reduced via PCA
 
     All implementations shared the same preprocessing pipeline including stopword removal and text normalization.
     """)
@@ -812,14 +839,12 @@ elif st.session_state.page == "Methodology":
 
 # Display the table using st.dataframe
     st.dataframe(df, use_container_width=True)
-    
-    
     st.write("##### Feature Grouping Strategies")
     st.write("""
-    After exploring feature inclusion one by one, we tested different ways of grouping features to optimize model performance. 
+    After exploring feature inclusion one by one, we tested different ways of grouping features to optimize model performance.
     The table below shows how various combinations performed across our evaluation metrics:
     """)
-    
+
     # New table data
     feature_grouping_data = {
         "Model": [
@@ -853,20 +878,20 @@ elif st.session_state.page == "Methodology":
             "Solid option (Lower Silhouette but improved Davies-Bouldin)"
         ]
     }
-    
+
     feature_grouping_df = pd.DataFrame(feature_grouping_data)
     st.dataframe(feature_grouping_df, use_container_width=True)
-    
+
     st.write("""
-    **Key Findings:**  
+    **Key Findings:**
     This initial evaluation based on clustering metrics revealed that combining LDA topics with core demographic features (Gender + Orientation) provided the strongest baseline performance, while adding education metrics further improved the silhouette score. However, through subsequent qualitative analysis of the actual connections being made, we recognized that including gender and orientation features was artificially restricting potential meaningful connections between community members. These demographic filters were creating unnecessary boundaries in a platform designed to foster inclusive belonging. As a result, we made the intentional decision to exclude gender and orientation from the final model, prioritizing connection quality over categorical matching.
     """)
-    
+
     st.write("### CNN Models for Image Analysis (Proof of Concept)")
     st.write("""
     As an experimental exercise, we implemented CNN models to generate profile pictures for our recommendations—purely to visualize how matches might appear in a live app. Since the OkCupid dataset doesn't include actual photos, we used a separate [human faces dataset](https://www.kaggle.com/datasets/ashwingupta3012/human-faces) to create this demo feature. Our implementation included:
-    - An [age detection model](https://www.geeksforgeeks.org/age-and-gender-detection-using-opencv-in-python/) (OpenCV/Caffe)  
-    - A [gender classifier](https://github.com/scoliann/GenderClassifierCNN) (TensorFlow/Keras)  
+    - An [age detection model](https://www.geeksforgeeks.org/age-and-gender-detection-using-opencv-in-python/) (OpenCV/Caffe)
+    - A [gender classifier](https://github.com/scoliann/GenderClassifierCNN) (TensorFlow/Keras)
 
     **Important note:** These generated images are synthetic placeholders and do not correspond to actual OkCupid users. We adapted the age brackets (18-20, 21-34, 35-49, 50-70) to better suit dating demographics, but this remains a technical demonstration rather than part of our core matching algorithm.
     """)
@@ -876,10 +901,10 @@ elif st.session_state.page == "Methodology":
     After extensive testing, we selected **DBSCAN** as our best-performing model, combined with **2 LDA topics** for text reduction.
     The final model uses a combination of features including age, relationship status,
    height, education level and status, languages spoken, dietary preferences, pet ownership,  number of children, text length of open ended questions, and the dominant topic from the LDA approach.
-    Our feature selection process and text reduction approach were initially developed using K-Means clustering, 
-which allowed us to systematically test the impact of individual features on connection quality, 
-establish baseline performance metrics for comparison, and identify which features contributed 
-meaningfully to creating authentic connections. This intermediate step proved valuable before 
+    Our feature selection process and text reduction approach were initially developed using K-Means clustering,
+which allowed us to systematically test the impact of individual features on connection quality,
+establish baseline performance metrics for comparison, and identify which features contributed
+meaningfully to creating authentic connections. This intermediate step proved valuable before
 evaluating DBSCAN as our final model.
     This combination of features and the DBSCAN model provided the best balance of clustering quality and interpretability, ensuring meaningful connections for users.
     """)
@@ -891,7 +916,7 @@ elif st.session_state.page == "The Team":
     st.write("## Contact Us")
     st.markdown("🌈 **Email:** [amooora@amooora.com.br](mailto:amooora@amooora.com.br)")
     st.write("---")  # Add a separator
-    
+
     st.write("## Meet the amazing team behind the project:")
 
     # Custom CSS for styling
