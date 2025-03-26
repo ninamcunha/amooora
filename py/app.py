@@ -626,15 +626,22 @@ elif st.session_state.page == "About":
     Amooora is a transformative platform designed to create a world of belonging and freedom, with a focus on the LGBTQ+ community in Brazil.
     It serves as a safe and inclusive space for cisgender women, bisexual individuals, transgender people, and non-binary individuals to find visibility, representation, and meaningful connections.
     Our mission is to empower this vibrant community by offering high-quality content, information, and services created by and for them.
-
+    
     Amooora fills a critical gap by uniting the Brazilian lesbian community, which has long lacked a dedicated platform for connection and specialized resources.
     Through features like a community map, users can discover and connect with others who share their interests and values.
     The platform also acts as a marketplace, enabling women to offer or access professional services—from legal and psychological support to creative and technical expertise—creating a trusted network for growth and collaboration.
-
+    
+    The image below shows the idealization for the Amooora platform. It highlights key features such as LGBTQ+ friendly spaces and events, a service marketplace for hiring within the community, a connection hub for meeting like-minded people, and a chat feature for engaging in shared interests and organizing meetups.
+    """)
+    
+    pitch_app_image_path = os.path.join(current_dir, "..", "images", "pitch_app.png")
+    st.image(pitch_app_image_path, caption="The idealization of the Amooora platform")
+    
+    st.write("""
     For this specific project, we leverage a dataset from OkCupid to explore deep learning models and innovative approaches for creating meaningful connections.
     By analyzing patterns and similarities within the data, we aim to develop a model that fosters genuine relationships within the community.
     For more details on our approach, please refer to the Methodology section.
-
+    
     More than just a platform, Amooora is a movement celebrating diversity and fostering authentic connections.
     By joining us, you become part of a community that empowers individuals to live freely and find their place in the world.
     Together, we can build a future where everyone belongs.
