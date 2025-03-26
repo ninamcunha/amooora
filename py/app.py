@@ -585,20 +585,20 @@ if st.session_state.page == "Connections":
             # print(type(top_5_similar_people))
 
             top_5_similar_people = pd.DataFrame(response['recommendations'])
-            time.sleep(10)
+            #time.sleep(10)
 
-        ids = top_5_similar_people.index.to_list()
+            ids = top_5_similar_people.index.to_list()
 
-        img_url = "https://amooora-768760105976.europe-west1.run.app/images"
+            img_url = "https://amooora-768760105976.europe-west1.run.app/images"
 
-        img_responses = []
+            img_responses = []
 
-        for i, idx in enumerate(ids):
-            # params[f'id_{i}'] = idx
-            img_response = requests.get(img_url, params={"idx": idx})
-            img_responses.append(img_response)
+            for i, idx in enumerate(ids):
+                # params[f'id_{i}'] = idx
+                img_response = requests.get(img_url, params={"idx": idx})
+                img_responses.append(img_response)
 
-        print(img_responses)
+            print(img_responses)
 
         # for img_response in img_responses:
         #     print(img_response)
