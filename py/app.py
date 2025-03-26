@@ -187,19 +187,37 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-# Navigation Menu
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    if st.button("Connections"):
+# Navigation Menu - Modified version
+st.markdown(
+    """
+    <style>
+    /* Navigation button styling to prevent wrapping */
+    .nav-button {
+        white-space: nowrap;
+        min-width: fit-content;
+        padding: 0 8px !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Use slightly wider columns for the navigation
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.1, 1, 1.1, 1.3, 1])
+with nav_col1:
+    if st.button("Connections", key="nav_connections"):
         st.session_state.page = "Connections"
-with col2:
-    if st.button("About"):
+with nav_col2:
+    if st.button("About", key="nav_about"):
         st.session_state.page = "About"
-with col3:
-    if st.button("Methodology"):
+with nav_col3:
+    if st.button("Context", key="nav_context"):
+        st.session_state.page = "Context"
+with nav_col4:
+    if st.button("Methodology", key="nav_methodology"):
         st.session_state.page = "Methodology"
-with col4:
-    if st.button("The Team"):
+with nav_col5:
+    if st.button("The Team", key="nav_team"):
         st.session_state.page = "The Team"
 
 
@@ -208,12 +226,13 @@ if st.session_state.page == "Connections":
     st.image(os.path.join(current_dir, "..", "images", "0_colagem_header_2.jpg"), width=700)  # Updated path
 elif st.session_state.page == "About":
     st.image(os.path.join(current_dir, "..", "images", "1_colagem_astro.jpg"), width=700)  # Updated path
+elif st.session_state.page == "Context":
+    st.image(os.path.join(current_dir, "..", "images", "3_colagem_suporte.jpg"), width=700)  # Updated path
 elif st.session_state.page == "Methodology":
     st.image(os.path.join(current_dir, "..", "images", "2_servicos.jpg"), width=700)  # Updated path
 elif st.session_state.page == "The Team":
     st.image(os.path.join(current_dir, "..", "images", "3_colagem_suporte.jpg"), width=700)  # Updated path
-elif st.session_state.page == "Contact Us":
-    st.image(os.path.join(current_dir, "..", "images", "contato.jpg"), width=700)  # Updated path
+
 
 # Initialize session state for page navigation
 if "page" not in st.session_state:
@@ -492,77 +511,76 @@ if st.session_state.page == "Connections":
 
     # Predict matches when the user submits the form
     if st.button("Find Connections"):
+        with st.spinner('🌈 Connecting you with your community......'):
 
-        for i in range(10):
-            user_input[f'essay{i}'] = st.session_state.get(f'essay{i}_input', '')
+            for i in range(10):
+                user_input[f'essay{i}'] = st.session_state.get(f'essay{i}_input', '')
 
-        # Convert user input to a DataFrame
-        user_input_df = pd.DataFrame([user_input])
+            # Convert user input to a DataFrame
+            user_input_df = pd.DataFrame([user_input])
 
-        # Ensure all essay columns exist and contain user input
-        for i in range(10):
-            essay_key = f'essay{i}'
-            # Add column if it doesn't exist
-            if essay_key not in user_input_df.columns:
-                user_input_df[essay_key] = user_input.get(essay_key, "")
-
-
-        # Get absolute path to csv directory (two levels up from py/)
-        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        csv_dir = os.path.join(project_root, "raw_data")
-        os.makedirs(csv_dir, exist_ok=True)
-
-        csv_path = os.path.join(csv_dir, "user_input.csv")
-
-        # Save with error handling
-        try:
-            if os.path.exists(csv_path):
-                user_input_df.to_csv(csv_path, mode='a', header=False, index=False)
-            else:
-                user_input_df.to_csv(csv_path, index=False)
-            st.success("Form Submitted!")
-        except Exception as e:
-            st.error(f"Failed to submit the form: {str(e)}")
-
-        # Ensure the DataFrame has all the required columns in the correct order
-        required_columns = [
-            'female', 'age_scaled', 'single', 'height_scaled', 'orientation_bisexual',
-            'orientation_gay', 'orientation_straight', 'education_type_college_univ',
-            'education_type_grad_or_professional_edu', 'education_type_not_disclosed',
-            'education_type_two_year_college_or_less', 'education_status_graduated',
-            'education_status_not_disclosed', 'education_status_working', 'speaks_english',
-            'speaks_spanish', 'speaks_portuguese', 'speaks_other', 'diet_type_vegetarian',
-            'has_dogs_yes', 'no_of_kids_more_than_one', 'no_of_kids_one', 'text_length_scaled',
-            'topic_0_from_two', 'hobby_1', 'hobby_2', 'hobby_3', 'movie_genre', 'music_genre',
-            'travel_destination', 'book_genre', 'sport', 'food', 'essay0', 'essay1', 'essay2',
-            'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9'
-        ]
-
-        # Reindex the DataFrame to match the required columns and fill missing values with 0
-        user_input_df = user_input_df.reindex(columns=required_columns, fill_value=0)
-
-        # Call your prediction function
-        # top_5_similar_people = predict_similar_people(user_input_df)
-        print("###########################")
-        print("###########################")
-        print("###########################")
-        print(user_input)
-        print("###########################")
-        print("###########################")
-        print("###########################")
-
-        url = "https://amooora-768760105976.europe-west1.run.app/recommend"
-        endpoint_url = url + f"?{''.join('{}={}&'.format(key, val) for key, val in user_input.items())}"
-
-        user_input.pop('name')
+            # Ensure all essay columns exist and contain user input
+            for i in range(10):
+                essay_key = f'essay{i}'
+                # Add column if it doesn't exist
+                if essay_key not in user_input_df.columns:
+                    user_input_df[essay_key] = user_input.get(essay_key, "")
 
 
+            # Get absolute path to csv directory (two levels up from py/)
+            project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            csv_dir = os.path.join(project_root, "raw_data")
+            os.makedirs(csv_dir, exist_ok=True)
 
-        response = requests.get(url, params=user_input).json()
-        # print(f"ESSA é a response: {top_5_similar_people}")
-        # print(type(top_5_similar_people))
+            csv_path = os.path.join(csv_dir, "user_input.csv")
 
-        top_5_similar_people = pd.DataFrame(response['recommendations'])
+            # Save with error handling
+            try:
+                if os.path.exists(csv_path):
+                    user_input_df.to_csv(csv_path, mode='a', header=False, index=False)
+                else:
+                    user_input_df.to_csv(csv_path, index=False)
+                #st.success("Form Submitted!")
+            except Exception as e:
+                st.error(f"Failed to submit the form: {str(e)}")
+
+            # Ensure the DataFrame has all the required columns in the correct order
+            required_columns = [
+                'female', 'age_scaled', 'single', 'height_scaled', 'orientation_bisexual',
+                'orientation_gay', 'orientation_straight', 'education_type_college_univ',
+                'education_type_grad_or_professional_edu', 'education_type_not_disclosed',
+                'education_type_two_year_college_or_less', 'education_status_graduated',
+                'education_status_not_disclosed', 'education_status_working', 'speaks_english',
+                'speaks_spanish', 'speaks_portuguese', 'speaks_other', 'diet_type_vegetarian',
+                'has_dogs_yes', 'no_of_kids_more_than_one', 'no_of_kids_one', 'text_length_scaled',
+                'topic_0_from_two', 'hobby_1', 'hobby_2', 'hobby_3', 'movie_genre', 'music_genre',
+                'travel_destination', 'book_genre', 'sport', 'food', 'essay0', 'essay1', 'essay2',
+                'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9'
+            ]
+
+            # Reindex the DataFrame to match the required columns and fill missing values with 0
+            user_input_df = user_input_df.reindex(columns=required_columns, fill_value=0)
+
+            # Call your prediction function
+            # top_5_similar_people = predict_similar_people(user_input_df)
+            print("###########################")
+            print("###########################")
+            print("###########################")
+            print(user_input)
+            print("###########################")
+            print("###########################")
+            print("###########################")
+
+            url = "https://amooora-768760105976.europe-west1.run.app/recommend"
+            endpoint_url = url + f"?{''.join('{}={}&'.format(key, val) for key, val in user_input.items())}"
+
+            user_input.pop('name')
+
+            response = requests.get(url, params=user_input).json()
+            # print(f"ESSA é a response: {top_5_similar_people}")
+            # print(type(top_5_similar_people))
+
+            top_5_similar_people = pd.DataFrame(response['recommendations'])
 
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
@@ -592,8 +610,33 @@ elif st.session_state.page == "About":
     By joining us, you become part of a community that empowers individuals to live freely and find their place in the world.
     Together, we can build a future where everyone belongs.
     """)
+    
 
-# Methodology Page
+elif st.session_state.page == "Context":
+
+
+    st.write('### Understanding the broader landscape of LGBTQIAP+ community needs')
+    
+    # First content section
+    st.markdown(" ")
+    st.markdown(" ")
+    safety_image_path = os.path.join(current_dir, "..", "images", "pitch_safety.png")
+    st.image(safety_image_path, caption="Creating safe spaces remains a crucial need for many community members")
+    #st.write("#### Creating safe spaces remains a crucial need for many community members.")
+    
+
+
+    st.markdown(" ")  # Divider between sections
+
+    # Second content section
+    st.markdown(" ")
+    st.markdown(" ")
+    money_image_path = os.path.join(current_dir, "..", "images", "pitch_money.png")
+    st.image(money_image_path, caption="The LGBTQIAP+ community represents significant purchasing power and economic influence.")
+   # st.write("#### The LGBTQIAP+ community represents significant purchasing power and economic influence.")
+
+    
+
 # Methodology Page
 elif st.session_state.page == "Methodology":
     st.write("## Methodology")
@@ -617,7 +660,7 @@ elif st.session_state.page == "Methodology":
     
     st.write("### Model Exploration")
     st.write("""
-    We began by evaluating three clustering models to determine the best approach for grouping users based on similarity. The models explored were:
+    We evaluated three clustering models to determine the best approach for grouping users based on similarity. The models explored were:
     """)
 
     st.write("""
@@ -768,6 +811,55 @@ elif st.session_state.page == "Methodology":
 # Display the table using st.dataframe
     st.dataframe(df, use_container_width=True)
     
+    
+    st.write("##### Feature Grouping Strategies")
+    st.write("""
+    After exploring feature inclusion one by one, we tested different ways of grouping features to optimize model performance. 
+    The table below shows how various combinations performed across our evaluation metrics:
+    """)
+    
+    # New table data
+    feature_grouping_data = {
+        "Model": [
+            "Model 1: LDA 1 + Gender + Orientation",
+            "Model 2: Adding Education",
+            "Model 3: Adding Languages",
+            "Model 4: Adding Text Length",
+            "Model 5: Adding Height",
+            "Model 6: Adding Vegetarian",
+            "Model 7: Adding Has Dog",
+            "Model 8: Adding Has Kids",
+            "Model 9: Adding Single",
+            "Model 10: Adding Age"
+        ],
+        "Silhouette ↑": [0.5743, 0.5987, 0.3864, 0.3375, 0.3431, 0.2986, 0.2628, 0.2665, 0.2273, 0.2378],
+        "Inertia (SSE) ↓": [386.3850, 18912.3684, 38847.2780, 45733.0714, 42265.7806, 48124.1491, 53159.2449, 57530.2317, 64094.6961, 64639.9396],
+        "Davies-Bouldin ↓": [0.4720, 0.9301, 1.3281, 1.3540, 1.3674, 1.4833, 1.4843, 1.4746, 1.6373, 1.5695],
+        "Calinski-Harabasz ↑": [436722.6819, 23506.9959, 11533.1687, 9249.1515, 10623.3284, 9184.3819, 8545.5971, 7929.0712, 6894.5560, 6963.6418],
+        "AMD ↓": [0.0001, 0.0011, 0.0065, 0.0282, 0.0561, 0.0654, 0.0794, 0.0959, 0.1121, 0.1526],
+        "Score (Lower is Better)": [7, 8, 9, 10, 20, 21, 23, 25, 26, 27],
+        "Best Model Consideration": [
+            "Best Overall (Best Silhouette & low AMD)",
+            "Solid Option (Good improvement)",
+            "Positive Impact (Good Silhouette & AMD)",
+            "Positive Impact (Good Silhouette & balanced performance)",
+            "Good Option (Improved Silhouette)",
+            "Borderline, but Leaning Toward Keep",
+            "Keep (Conditional)",
+            "Keep (Conditional)",
+            "Keep (Conditional)",
+            "Solid option (Lower Silhouette but improved Davies-Bouldin)"
+        ]
+    }
+    
+    feature_grouping_df = pd.DataFrame(feature_grouping_data)
+    st.dataframe(feature_grouping_df, use_container_width=True)
+    
+    st.write("""
+    **Key Findings:**  
+    This initial evaluation based on clustering metrics revealed that combining LDA topics with core demographic features (Gender + Orientation) provided the strongest baseline performance, while adding education metrics further improved the silhouette score. However, through subsequent qualitative analysis of the actual connections being made, we recognized that including gender and orientation features was artificially restricting potential meaningful connections between community members. These demographic filters were creating unnecessary boundaries in a platform designed to foster inclusive belonging. As a result, we made the intentional decision to exclude gender and orientation from the final model, prioritizing connection quality over categorical matching.
+    """)
+    
     st.write("### CNN Models for Image Analysis (Proof of Concept)")
     st.write("""
     As an experimental exercise, we implemented CNN models to generate profile pictures for our recommendations—purely to visualize how matches might appear in a live app. Since the OkCupid dataset doesn't include actual photos, we used a separate [human faces dataset](https://www.kaggle.com/datasets/ashwingupta3012/human-faces) to create this demo feature. Our implementation included:
@@ -780,29 +872,48 @@ elif st.session_state.page == "Methodology":
     st.write("### Final Model and Features")
     st.write("""
     After extensive testing, we selected **DBSCAN** as our best-performing model, combined with **2 LDA topics** for text reduction.
-    The final model uses a combination of features including gender, age, relationship status,
-   height, sexual orientation, education level and status, languages spoken, dietary preferences, pet ownership,  number of children, text length of open ended questions, and the dominant topic from the LDA approach.
+    The final model uses a combination of features including age, relationship status,
+   height, education level and status, languages spoken, dietary preferences, pet ownership,  number of children, text length of open ended questions, and the dominant topic from the LDA approach.
+    Our feature selection process and text reduction approach were initially developed using K-Means clustering, 
+which allowed us to systematically test the impact of individual features on connection quality, 
+establish baseline performance metrics for comparison, and identify which features contributed 
+meaningfully to creating authentic connections. This intermediate step proved valuable before 
+evaluating DBSCAN as our final model.
     This combination of features and the DBSCAN model provided the best balance of clustering quality and interpretability, ensuring meaningful connections for users.
     """)
 
 
+
 # The Team Page
 elif st.session_state.page == "The Team":
+    st.write("## Contact Us")
+    st.markdown("🌈 **Email:** [amooora@amooora.com.br](mailto:amooora@amooora.com.br)")
+    st.write("---")  # Add a separator
+    
     st.write("## Meet the amazing team behind the project:")
 
-        # Custom CSS to adjust image alignment
+    # Custom CSS for styling
     st.markdown(
         """
         <style>
         .team-image {
-            margin-top: 20px;  /* Adjust this value to move the image down */
+            margin-top: 20px;
+        }
+        .linkedin-icon {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .linkedin-icon img {
+            width: 30px;
+            height: 30px;
         }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    st.write("---")  # Add a separator between team members
+    st.write("---")  # Add a separator between contact and first team member
 
     # Function to check if file exists
     def check_file_exists(file_path):
@@ -813,15 +924,40 @@ elif st.session_state.page == "The Team":
             return False
         return True
 
-    # Nina Menezes Cunha
-    col1, col2 = st.columns([1, 4])  # Adjust column widths (1:3 ratio)
-    with col1:
-        nina_image_path = os.path.join(current_dir, "..", "images", "img_nina.png")  # Direct path (same folder as app.py)
-        if check_file_exists(nina_image_path):
-            st.image(nina_image_path, width=200)  # Adjust width as needed
-    with col2:
-        st.write("### Nina Menezes Cunha")
-        st.write("""
+    # LinkedIn icon URL
+    linkedin_icon_url = "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
+
+    # Function to display team member info
+    def display_team_member(image_path, name, linkedin_url, description):
+        col1, col2 = st.columns([1, 4])
+        with col1:
+            if check_file_exists(image_path):
+                st.image(image_path, width=200)
+            # LinkedIn icon below the image
+            st.markdown(
+                f"""
+                <div class="linkedin-icon">
+                    <a href="{linkedin_url}" target="_blank">
+                        <img src="{linkedin_icon_url}" alt="LinkedIn">
+                    </a>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        with col2:
+            st.write(f"### {name}")
+            st.write(description)
+
+        st.write("---")
+
+    current_dir = os.path.dirname(__file__)  # Ensure correct directory
+
+    # Team Members
+    display_team_member(
+        os.path.join(current_dir, "..", "images", "img_nina.png"),
+        "Nina Menezes Cunha",
+        "https://www.linkedin.com/in/nina-menezes-cunha/",
+        """
         Nina Menezes Cunha is a data scientist with over a decade of experience in machine learning, causal inference, and impact evaluation.
         She holds a Ph.D. in Economics of Education from Stanford University and has expertise in predictive modeling, A/B testing, and big data analytics.
         In the U.S., she worked as a Senior Researcher at FHI 360 and consulted for the World Bank, contributing to peer-reviewed research and global projects.
@@ -829,39 +965,30 @@ elif st.session_state.page == "The Team":
         After returning to Brazil, she founded Amooora, a startup focused on products and services for the lesbian community.
         She recently completed the Data Science Bootcamp at Le Wagon, further strengthening her expertise in AI and data science.
         Passionate about using data for social good, she is committed to leveraging AI for meaningful impact.
-        """)
+        """
+    )
 
-    st.write("---")  # Add a separator between team members
-
-    # Thais Felipelli
-    col3, col4 = st.columns([1, 4])  # Adjust column widths (1:3 ratio)
-    with col3:
-        thais_image_path = os.path.join(current_dir, "..", "images", "img_thais.jpeg") # Direct path (same folder as app.py)
-        if check_file_exists(thais_image_path):
-            st.image(thais_image_path, width=200)  # Adjust width as needed
-    with col4:
-        st.write("### Thais Felipelli")
-        st.write("""
+    display_team_member(
+        os.path.join(current_dir, "..", "images", "img_thais.jpeg"),
+        "Thais Felipelli",
+        "https://www.linkedin.com/in/tfelipelli/",
+        """
         Thais Felipelli is a mechatronics engineer with experience in software development, specializing in Laboratory Information Management Systems (LIMS)
         to automate processes and enable data-driven decision-making. After earning an MBA from MIT, she transitioned into venture capital,
         playing a key role in developing and founding startups such as Evino. Combining a passion for math and technology,
         she completed the Data Science Bootcamp at Le Wagon, furthering her expertise in AI and data science.
-        """)
+        """
+    )
 
-    st.write("---")  # Add a separator between team members
-
-    # André Menezes
-    col5, col6 = st.columns([1, 4])  # Adjust column widths (1:3 ratio)
-    with col5:
-        andre_image_path = os.path.join(current_dir, "..", "images", "img_andre.jpeg")   # Direct path (same folder as app.py)
-        if check_file_exists(andre_image_path):
-            st.image(andre_image_path, width=200)  # Adjust width as needed
-    with col6:
-        st.write("### André Menezes")
-        st.write("""
+    display_team_member(
+        os.path.join(current_dir, "..", "images", "img_andre.jpeg"),
+        "André Menezes",
+        "https://www.linkedin.com/in/andre-menezes-developer/",
+        """
         André Menezes has a diverse professional background, spanning civil engineering, economics, social communication, and the events industry
         before transitioning into tech. After completing the Web Development course at Le Wagon, he discovered a passion for coding and quickly
         joined the school as a Teacher Assistant. He was soon promoted to Teacher and later took on the role of Batch Manager, supporting students
-        and overseeing program operations. With a growing interest in data science, he completed Le Wagon’s Data Science Bootcamp to expand his
+        and overseeing program operations. With a growing interest in data science, he completed Le Wagon's Data Science Bootcamp to expand his
         expertise in AI and data-driven product development.
-        """)
+        """
+    )
