@@ -7,7 +7,7 @@ def retrieve_images(id: int) -> None:
     print(f"id dentro de retrieve images: {id}")
     # load okcupid csv
     PROJECT_FOLDER = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    filename = os.path.join(PROJECT_FOLDER, "raw_data", "ok_stream_with_age.csv")
+    filename = os.path.join(PROJECT_FOLDER, "raw_data", "ok_stream_demo_day.csv")
     df = pd.read_csv(filename)
     # find row matching id
     recommendation_row = df.iloc[id]
