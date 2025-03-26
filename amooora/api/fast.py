@@ -1,7 +1,8 @@
+import io
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from amooora.interface.main_local import clean_and_preprocess
-
+from amooora.ml_logic.images import recommendation_images, retrieve_images
 app = FastAPI()
 
 
@@ -92,3 +93,15 @@ def recommend(
     return {
         'recommendations': recommendations
     }
+
+
+@app.get('/images')
+def images(idx: int):
+    print("!!!! RODANDO API ENDPOINT !!!!")
+
+    image_path = retrieve_images(idx)
+    image = recommendation_images(image_path)
+    img_bytes = io.BytesIO()
+    image.save(img_bytes, format="PNG")
+    img_bytes.seek(0)
+    return Response(content=img_bytes.getvalue(), media_type="image/png")
