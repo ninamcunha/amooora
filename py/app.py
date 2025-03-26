@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import requests
+import time
 from PIL import Image
 import io
 
@@ -584,6 +585,7 @@ if st.session_state.page == "Connections":
             # print(type(top_5_similar_people))
 
             top_5_similar_people = pd.DataFrame(response['recommendations'])
+            time.sleep(10)
 
         ids = top_5_similar_people.index.to_list()
 
@@ -637,20 +639,20 @@ elif st.session_state.page == "About":
     By joining us, you become part of a community that empowers individuals to live freely and find their place in the world.
     Together, we can build a future where everyone belongs.
     """)
-    
+
 
 elif st.session_state.page == "Context":
 
 
     st.write('### Understanding the broader landscape of LGBTQIAP+ community needs')
-    
+
     # First content section
     st.markdown(" ")
     st.markdown(" ")
     safety_image_path = os.path.join(current_dir, "..", "images", "pitch_safety.png")
     st.image(safety_image_path, caption="Creating safe spaces remains a crucial need for many community members")
     #st.write("#### Creating safe spaces remains a crucial need for many community members.")
-    
+
 
 
     st.markdown(" ")  # Divider between sections
@@ -662,7 +664,7 @@ elif st.session_state.page == "Context":
     st.image(money_image_path, caption="The LGBTQIAP+ community represents significant purchasing power and economic influence.")
    # st.write("#### The LGBTQIAP+ community represents significant purchasing power and economic influence.")
 
-    
+
 
 # Methodology Page
 elif st.session_state.page == "Methodology":
@@ -836,13 +838,13 @@ elif st.session_state.page == "Methodology":
     df = pd.DataFrame(data)
 
 # Display the table using st.dataframe
-    st.dataframe(df, use_container_width=True)    
+    st.dataframe(df, use_container_width=True)
     st.write("##### Feature Grouping Strategies")
     st.write("""
-    After exploring feature inclusion one by one, we tested different ways of grouping features to optimize model performance. 
+    After exploring feature inclusion one by one, we tested different ways of grouping features to optimize model performance.
     The table below shows how various combinations performed across our evaluation metrics:
     """)
-    
+
     # New table data
     feature_grouping_data = {
         "Model": [
@@ -876,15 +878,15 @@ elif st.session_state.page == "Methodology":
             "Solid option (Lower Silhouette but improved Davies-Bouldin)"
         ]
     }
-    
+
     feature_grouping_df = pd.DataFrame(feature_grouping_data)
     st.dataframe(feature_grouping_df, use_container_width=True)
-    
+
     st.write("""
-    **Key Findings:**  
+    **Key Findings:**
     This initial evaluation based on clustering metrics revealed that combining LDA topics with core demographic features (Gender + Orientation) provided the strongest baseline performance, while adding education metrics further improved the silhouette score. However, through subsequent qualitative analysis of the actual connections being made, we recognized that including gender and orientation features was artificially restricting potential meaningful connections between community members. These demographic filters were creating unnecessary boundaries in a platform designed to foster inclusive belonging. As a result, we made the intentional decision to exclude gender and orientation from the final model, prioritizing connection quality over categorical matching.
     """)
-    
+
     st.write("### CNN Models for Image Analysis (Proof of Concept)")
     st.write("""
     As an experimental exercise, we implemented CNN models to generate profile pictures for our recommendations—purely to visualize how matches might appear in a live app. Since the OkCupid dataset doesn't include actual photos, we used a separate [human faces dataset](https://www.kaggle.com/datasets/ashwingupta3012/human-faces) to create this demo feature. Our implementation included:
@@ -899,10 +901,10 @@ elif st.session_state.page == "Methodology":
     After extensive testing, we selected **DBSCAN** as our best-performing model, combined with **2 LDA topics** for text reduction.
     The final model uses a combination of features including age, relationship status,
    height, education level and status, languages spoken, dietary preferences, pet ownership,  number of children, text length of open ended questions, and the dominant topic from the LDA approach.
-    Our feature selection process and text reduction approach were initially developed using K-Means clustering, 
-which allowed us to systematically test the impact of individual features on connection quality, 
-establish baseline performance metrics for comparison, and identify which features contributed 
-meaningfully to creating authentic connections. This intermediate step proved valuable before 
+    Our feature selection process and text reduction approach were initially developed using K-Means clustering,
+which allowed us to systematically test the impact of individual features on connection quality,
+establish baseline performance metrics for comparison, and identify which features contributed
+meaningfully to creating authentic connections. This intermediate step proved valuable before
 evaluating DBSCAN as our final model.
     This combination of features and the DBSCAN model provided the best balance of clustering quality and interpretability, ensuring meaningful connections for users.
     """)
@@ -914,7 +916,7 @@ elif st.session_state.page == "The Team":
     st.write("## Contact Us")
     st.markdown("🌈 **Email:** [amooora@amooora.com.br](mailto:amooora@amooora.com.br)")
     st.write("---")  # Add a separator
-    
+
     st.write("## Meet the amazing team behind the project:")
 
     # Custom CSS for styling

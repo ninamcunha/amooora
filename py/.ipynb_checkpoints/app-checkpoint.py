@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import requests
+import time
 
 # Get the directory containing app.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -581,6 +582,7 @@ if st.session_state.page == "Connections":
             # print(type(top_5_similar_people))
 
             top_5_similar_people = pd.DataFrame(response['recommendations'])
+            time.sleep(10)
 
         # Display the bios of the top 5 matches
         st.write("### Meet Your Top 5 Community Connections:")
