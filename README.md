@@ -1,8 +1,10 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ninamcunha/my-portfolio/main/images/icon_amooora.jpg" width="200" alt="Amooora Logo">
+</p>
+
 # Amooora Connection Algorithm Project
 
 **[Explore the interactive demo](https://amooora.streamlit.app/)**
-
-<img src="https://ninamcunha.github.io/my-portfolio/images/icon_amooora.jpg" width="150" align="right" style="margin: 0 0 20px 20px;">
 
 ## 🌈 Project Motivation
 
