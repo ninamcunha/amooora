@@ -1,8 +1,8 @@
 # Amooora Connection Algorithm Project
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://amooora.streamlit.app/)  
-*Explore our interactive demo*
 
-<img src="https://raw.githubusercontent.com/ninamcunha/amooora/main/images/amooora_logo.png" width="200" align="right" style="margin-top: -60px;">
+**[Explore the interactive demo](https://amooora.streamlit.app/)**
+
+<img src="https://ninamcunha.github.io/my-portfolio/images/icon_amooora.jpg" width="150" align="right" style="margin: 0 0 20px 20px;">
 
 ## 🌈 Project Motivation
 
