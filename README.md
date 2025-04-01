@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://ninamcunha.github.io/my-portfolio/images/icon_amooora.jpg" width="200" alt="Amooora Logo" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
 </p>
+
 # Amooora Connection Algorithm Project
 
 **[Explore the interactive demo](https://amooora.streamlit.app/)**
