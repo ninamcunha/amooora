@@ -68,7 +68,7 @@ graph TD
     C --> E[Demographic Filters]
     D & E --> F[DBSCAN Clustering]
     F --> G[5 Recommendations]
-
+``` 
 ## 👥 Team
 
 ### Nina Menezes Cunha
