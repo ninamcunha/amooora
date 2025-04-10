@@ -69,7 +69,7 @@ graph TD
     D & E --> F[DBSCAN Clustering]
     F --> G[5 Recommendations]
 
-# Team Profiles
+## Team Profiles
 
 <div align="center">
   <h3>Meet Our Team</h3>
