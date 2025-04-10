@@ -69,3 +69,40 @@ graph TD
     D & E --> F[DBSCAN Clustering]
     F --> G[5 Recommendations]
 
+## 👥 Team
+
+### Nina Menezes Cunha
+<div style="display: flex; align-items: center; gap: 20px; margin: 20px 0;">
+  <img src="./images/img_nina" width="150" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+  <div>
+    Data scientist with 10+ years of experience in machine learning and impact evaluation. Stanford Ph.D. in Economics of Education, former Senior Researcher at FHI 360 and World Bank consultant. Founder of Amooora.
+    <br><br>
+    <a href="https://github.com/ninamcunha" target="_blank">
+      <img src="https://img.shields.io/badge/GitHub-Profile-blue?style=flat&logo=github" alt="GitHub">
+    </a>
+  </div>
+</div>
+
+### Thais Felipelli
+<div style="display: flex; align-items: center; gap: 20px; margin: 20px 0;">
+  <img src="./images/img_thais" width="150" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+  <div>
+    Mechatronics engineer and MIT MBA with venture capital experience. Specializes in LIMS systems and startup development. Passionate about data-driven solutions.
+    <br><br>
+    <a href="https://github.com/tfelipelli" target="_blank">
+      <img src="https://img.shields.io/badge/GitHub-Profile-blue?style=flat&logo=github" alt="GitHub">
+    </a>
+  </div>
+</div>
+
+### André Menezes
+<div style="display: flex; align-items: center; gap: 20px; margin: 20px 0;">
+  <img src="./images/img_andre" width="150" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+  <div>
+    Multidisciplinary professional turned tech specialist. Former Le Wagon instructor with expertise in web development and data science. Focused on AI product development.
+    <br><br>
+    <a href="https://github.com/dedemenezes" target="_blank">
+      <img src="https://img.shields.io/badge/GitHub-Profile-blue?style=flat&logo=github" alt="GitHub">
+    </a>
+  </div>
+</div>
