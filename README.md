@@ -69,14 +69,15 @@ graph TD
     D & E --> F[DBSCAN Clustering]
     F --> G[5 Recommendations]
 ``` 
+
 ## 👥 Team
 
-<table>
-  <tr>
-    <td width="150" valign="top">
+<table style="border:none; border-collapse: collapse; margin-bottom: 20px;">
+  <tr style="border:none;">
+    <td style="border:none; padding:0; width:150px; vertical-align:top;">
       <img src="images/img_nina.png" width="150" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
     </td>
-    <td valign="top">
+    <td style="border:none; padding:0 0 0 20px; vertical-align:top;">
       <h3>Nina Menezes Cunha</h3>
       Data scientist with 10+ years of experience in machine learning and impact evaluation. Stanford Ph.D. in Economics of Education, former Senior Researcher at FHI 360 and World Bank consultant. Founder of Amooora.
       <br><br>
@@ -87,12 +88,12 @@ graph TD
   </tr>
 </table>
 
-<table>
-  <tr>
-    <td width="150" valign="top">
+<table style="border:none; border-collapse: collapse; margin-bottom: 20px;">
+  <tr style="border:none;">
+    <td style="border:none; padding:0; width:150px; vertical-align:top;">
       <img src="images/img_thais.jpeg" width="150" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
     </td>
-    <td valign="top">
+    <td style="border:none; padding:0 0 0 20px; vertical-align:top;">
       <h3>Thais Felipelli</h3>
       Mechatronics engineer and MIT MBA with venture capital experience. Specializes in LIMS systems and startup development. Passionate about data-driven solutions.
       <br><br>
@@ -103,12 +104,12 @@ graph TD
   </tr>
 </table>
 
-<table>
-  <tr>
-    <td width="150" valign="top">
+<table style="border:none; border-collapse: collapse;">
+  <tr style="border:none;">
+    <td style="border:none; padding:0; width:150px; vertical-align:top;">
       <img src="images/img_andre.jpeg" width="150" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
     </td>
-    <td valign="top">
+    <td style="border:none; padding:0 0 0 20px; vertical-align:top;">
       <h3>André Menezes</h3>
       Multidisciplinary professional turned tech specialist. Former Le Wagon instructor with expertise in web development and data science. Focused on AI product development.
       <br><br>
